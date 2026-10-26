@@ -213,6 +213,15 @@ body.v19-gated{overflow-x:hidden}
 .v21-effect{padding:18px 20px;max-width:90ch}.v21-effect h4{color:#edc384;margin:0 0 10px;font-size:13px;letter-spacing:.07em;text-transform:uppercase}.v21-effect p{margin:0 0 12px}.v21-effect p:last-child{margin-bottom:0}.v21-effect strong{color:#edc384;font-weight:600}.v21-effect .v21-subsection{border-left:2px solid #b58e55;padding-left:12px;margin-top:18px}
 .v21-spell footer{padding:12px 20px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}.v21-warning{margin:0;padding:12px 20px;background:#b58e551a;color:#edc384}.v9-preview:has(>.v21-spell),.v9-descpreview:has(>.v21-spell){padding:0;background:transparent;border:0}
 @media(max-width:650px){.v21-meta{grid-template-columns:repeat(2,minmax(0,1fr))}.v21-extra{grid-template-columns:1fr}.v21-spell header{padding:15px;gap:10px}.v21-spell h3{font-size:19px}.v21-effect{padding:16px}.v21-meta>div{padding:12px}.v21-spell .v21-circle{font-size:11px;padding:3px 8px}}
+</style><style>
+.v20-catalog-filters{margin-bottom:16px;min-width:0}
+#v20-category-label{display:block;font-weight:600;margin-bottom:8px}
+.v20-category-buttons{display:flex;flex-wrap:wrap;gap:8px}
+.v20-category-buttons .btn{min-height:44px;white-space:normal}
+.v20-category-buttons [aria-pressed="true"]{background:#c5a064;color:#171923;border-color:#e8c68d;font-weight:700;box-shadow:inset 0 0 0 1px currentColor}
+#v20-search-status{font-size:13px;line-height:1.5;margin:10px 0 0;overflow-wrap:anywhere}
+#v9-pane .v17-catalog-grid select{width:100%;min-width:0}
+@media(max-width:600px){.v20-category-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.v20-category-buttons .btn{width:100%}}
 </style></head>
 <body class="v19-gated"><noscript><div class="noscript">Ative o JavaScript para usar a ficha automatizada.</div></noscript>
 <div class="app"><aside class="sidebar"><div class="brand">Dungeons &amp; Dragons <small>3.5e • Ficha da mesa</small></div><div class="side-label">Seções da ficha</div><nav class="nav" id="navigation"></nav></aside><main class="main"><header class="top"><div><div class="eyebrow">Dungeons &amp; Dragons • 3.5e</div><h1 id="titleName">Personagem sem nome</h1><div class="muted sm" id="subtitle"></div></div><div class="actions"><select id="charSelect" aria-label="Personagem" class="btn"></select><button class="btn" data-action="new">+ Personagem</button><button class="btn" data-action="duplicate">Duplicar</button><button class="btn" data-action="export">Exportar JSON</button><label class="btn" for="importFile" style="cursor:pointer">Importar JSON</label><input type="file" id="importFile" accept=".json,application/json" hidden><button class="btn primary" data-action="print">Baixar PDF preenchido</button></div></header><div class="stats" id="stats"></div><div id="content"></div></main></div><div class="toast" id="toast" role="status"></div><dialog class="help-dialog" id="helpDialog" aria-labelledby="helpTitle"><div class="hd"><h2 id="helpTitle"></h2><button type="button" class="close" data-help-close aria-label="Fechar ajuda">×</button></div><div class="body" id="helpBody"></div></dialog>
@@ -24487,10 +24496,24 @@ document.addEventListener('submit',e=>{if(e.target.id!=='edit12-form'||!['skill'
 
 // Global catalog search keeps the selected item's real category.
 let v13GlobalQuery='',v13Purchase=null;
+// The browsing category is independent of the selected item's actual type.
+let v20CatalogCategory='all';
+const V20_CATALOG_CATEGORIES=[['all','Todos'],['item','Itens / Equipamentos'],['weapon','Armas'],['armor','Armaduras'],['shield','Escudos'],['magic','Itens mágicos']];
+function v20CatalogFilters(){
+ return `<div class="v20-catalog-filters"><span id="v20-category-label">Categorias do catálogo</span><div class="v20-category-buttons" role="group" aria-labelledby="v20-category-label">${V20_CATALOG_CATEGORIES.map(([value,label])=>`<button type="button" class="btn small" data-v20-category="${value}" aria-pressed="${v20CatalogCategory===value}">${label}</button>`).join('')}</div><p id="v20-search-status" class="muted" role="status" aria-live="polite"></p></div>`;
+}
+document.addEventListener('click',e=>{
+ const button=e.target.closest('[data-v20-category]');if(!button)return;
+ v20CatalogCategory=button.dataset.v20Category;v13GlobalResults();
+});
 function v13CatalogSearch(query){const words=v12Words(query).map(w=>w==='coura'?'couro':w);return [...WEAPON_CATALOG.map(x=>({...x,type:'weapon'})),...ARMOR_CATALOG.map(x=>({...x,type:x.category==='escudo'?'shield':'armor'})),...GEAR_CATALOG.map(x=>({...x,type:'item'})),...MAGIC_CATALOG.map(x=>({...x,type:'magic'}))].map(x=>{const title=v12Norm(v9NiceName(x));return {...x,searchScore:words.reduce((n,w)=>n+(title.includes(w)?5:0),0),match:words.every(w=>title.includes(w))};}).filter(x=>x.match).sort((a,b)=>b.searchScore-a.searchScore||a.name.localeCompare(b.name));}
 function v13GlobalResults(){
  const select=document.getElementById('v9-catalog');if(!select)return;
- const items=v13CatalogSearch(v13GlobalQuery),current=items.find(x=>x.name===v9Ui.catalog&&x.type===v9Ui.type);
+ const searching=!!v13GlobalQuery.trim();
+ const items=v13CatalogSearch(v13GlobalQuery).filter(x=>searching||v20CatalogCategory==='all'||x.type===v20CatalogCategory),current=items.find(x=>x.name===v9Ui.catalog&&x.type===v9Ui.type);
+ document.querySelectorAll('[data-v20-category]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v20Category===v20CatalogCategory)));
+ const status=document.getElementById('v20-search-status'),label=V20_CATALOG_CATEGORIES.find(([value])=>value===v20CatalogCategory)?.[1]||'Todos';
+ if(status)status.textContent=searching?`Busca em todas as categorias: ${items.length} resultado(s). Ao limpar, voltar para ${label}.`:`${label}: ${items.length} item(ns). Digite para pesquisar em todas as categorias.`;
  select.innerHTML=(items.length?'':'<option value="">Nenhum item encontrado</option>')+items.map(x=>`<option data-type="${enc(x.type)}" value="${enc(x.name)}" ${current===x?'selected':''}>${enc(v9NiceName(x))}</option>`).join('')+'<option value="custom">Personalizado…</option>';
  if(v9Ui.catalog==='custom'&&!v13GlobalQuery)select.value='custom';
  v9Ui.catalog=select.value;
@@ -24499,7 +24522,8 @@ function v13GlobalResults(){
 }
 const v13Pane=v9DrawPane;v9DrawPane=function(){
  v9Ui.filter='';v13Pane();if(!v9Ui.pane||v9Ui.pane==='coin')return;
- const input=document.getElementById('v9-filter');if(input){input.id='v13-global-search';input.value=v13GlobalQuery;input.placeholder='Buscar armas, armaduras, poções…';input.setAttribute('aria-label','Pesquisar no catálogo');v13GlobalResults();}
+ document.querySelector('#v9-pane .v9-formgrid')?.insertAdjacentHTML('beforebegin',v20CatalogFilters());
+ const input=document.getElementById('v9-filter');if(input){input.id='v13-global-search';input.value=v13GlobalQuery;input.placeholder='Buscar armas, armaduras, poções…';input.setAttribute('aria-label','Pesquisar em todas as categorias');input.setAttribute('aria-describedby','v20-search-status');v13GlobalResults();}
  const type=document.getElementById('v9-type');if(type)type.closest('.field').classList.add('v17-item-type');
  document.querySelector('#v9-pane .v9-formgrid')?.classList.add('v17-catalog-grid');
  document.getElementById('v9-catalog')?.setAttribute('aria-label','Item do catálogo');
