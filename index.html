@@ -162,9 +162,46 @@
 .v17-photo-preview{margin:8px 12px 16px 0;vertical-align:middle}
 #v17-player-dialog .actions{gap:10px;margin-top:18px}
 @media(max-width:600px){.v17-profile-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.v17-character-grid{grid-template-columns:1fr}.v17-player-bar{margin-bottom:12px}.v17-profile-title{gap:12px}}
+
+/* v18: gerenciamento seguro de jogadores e vinculação de fichas existentes */
+.v18-profile-settings{display:grid;gap:9px;margin-top:13px}
+.v18-profile-row{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:#232531}
+.v18-profile-row .v18-meta{display:flex;gap:11px;align-items:center;min-width:0}
+.v18-profile-row small{display:block;color:var(--muted);margin-top:2px}
+.v18-mapping-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(155px,230px);gap:14px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.v18-mapping-row select{width:100%;padding:10px;background:#11141e;color:var(--text);border:1px solid #666176;border-radius:8px}
+.v18-mapping-row strong{display:block;overflow-wrap:anywhere}
+.v18-mapping-row small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+#v18-dialog{background:#1d1f2c;color:var(--text);border:1px solid #75674f;border-radius:15px;padding:20px;max-width:min(650px,95vw);width:100%;max-height:85vh;overflow:auto;box-shadow:0 16px 65px #0009}
+#v18-dialog::backdrop{background:#08090bc7}
+#v18-dialog h2{color:var(--gold);margin:0 0 10px;font:700 24px Georgia,serif}
+#v18-dialog .actions{margin-top:20px}
+@media(max-width:540px){.v18-mapping-row{grid-template-columns:1fr;gap:6px}}
+
+<style>/* A ficha permanece oculta até autenticação e carregamento completos. */
+body.v19-gated .app{visibility:hidden;height:0;overflow:hidden}
+body.v19-master-mode .app{display:none}
+body.v19-player-mode .app{visibility:visible}
+#v19-root[hidden]{display:none!important}
+#v19-root{min-height:100vh;padding:25px 18px;color:var(--text);background:var(--bg)}
+.v19-auth-panel{width:min(450px,100%);margin:6vh auto 0;padding:28px;background:var(--panel);border:1px solid var(--line);border-radius:16px}
+.v19-auth-panel h1{font:700 30px Georgia,serif;color:var(--gold)}
+.v19-auth-panel form{display:grid;gap:13px}.v19-auth-panel form label{display:grid;gap:6px;font-size:13px}
+.v19-auth-panel form button{margin-top:8px}.v19-auth-panel>.btn{margin-top:10px}
+.v19-user-nav{margin-top:20px;border-top:1px solid var(--line);padding:12px 0;overflow-wrap:anywhere;font-size:12px}
+.v19-user-nav>span{display:block;color:var(--muted);margin:4px 9px}.v19-sync{color:var(--ok)!important}
+.v19-manage summary,#v19-root summary{cursor:pointer;color:var(--gold);padding:5px 0}.v19-manage-content{padding:13px 0;display:grid;gap:12px}
+#v19-join label{display:grid;gap:5px;margin:12px 0}#v19-join{max-width:610px}
+.v19-master{max-width:1140px;margin:auto;display:grid;gap:15px}.v19-master-head{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center;padding:16px 0}.v19-master-head h1{font:700 31px Georgia,serif;color:var(--gold);margin:4px 0}
+.v19-campaign-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:13px}.v19-campaign{border:1px solid var(--line);padding:18px;border-radius:11px;background:var(--panel2)}.v19-campaign h3{margin:0 0 10px;color:var(--gold)}
+.v19-read-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:9px}.v19-read-grid>div{padding:11px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);min-width:0;overflow-wrap:anywhere}.v19-read-grid strong,.v19-read-grid span{display:block}.v19-read-grid span{color:var(--muted);margin-top:7px;white-space:pre-wrap}.v19-bubble{background:none;border:0;color:var(--gold);cursor:pointer;margin:8px 0 0}
+.v19-note{margin:12px 0;padding:11px;background:#313142;border-left:2px solid var(--gold);border-radius:6px;white-space:pre-wrap;overflow-wrap:anywhere}.v19-note p{margin:7px 0}.v19-note small{color:var(--muted)}
+.v19-import-list{max-height:40vh;overflow:auto;display:grid;gap:9px}.v19-import-list>label{padding:6px;border-bottom:1px solid var(--line)}
+@media(max-width:780px){.v19-auth-panel{padding:18px}.v19-master-head h1{font-size:25px}.v19-read-grid{grid-template-columns:1fr}}
 </style></head>
-<body><noscript><div class="noscript">Ative o JavaScript para usar a ficha automatizada.</div></noscript>
+<body class="v19-gated"><noscript><div class="noscript">Ative o JavaScript para usar a ficha automatizada.</div></noscript>
 <div class="app"><aside class="sidebar"><div class="brand">Dungeons &amp; Dragons <small>3.5e • Ficha da mesa</small></div><div class="side-label">Seções da ficha</div><nav class="nav" id="navigation"></nav></aside><main class="main"><header class="top"><div><div class="eyebrow">Dungeons &amp; Dragons • 3.5e</div><h1 id="titleName">Personagem sem nome</h1><div class="muted sm" id="subtitle"></div></div><div class="actions"><select id="charSelect" aria-label="Personagem" class="btn"></select><button class="btn" data-action="new">+ Personagem</button><button class="btn" data-action="duplicate">Duplicar</button><button class="btn" data-action="export">Exportar JSON</button><label class="btn" for="importFile" style="cursor:pointer">Importar JSON</label><input type="file" id="importFile" accept=".json,application/json" hidden><button class="btn primary" data-action="print">Baixar PDF preenchido</button></div></header><div class="stats" id="stats"></div><div id="content"></div></main></div><div class="toast" id="toast" role="status"></div><dialog class="help-dialog" id="helpDialog" aria-labelledby="helpTitle"><div class="hd"><h2 id="helpTitle"></h2><button type="button" class="close" data-help-close aria-label="Fechar ajuda">×</button></div><div class="body" id="helpBody"></div></dialog>
+<div id="v19-root" role="region" aria-label="Acesso e campanhas"><section class="v19-auth-panel"><h1>Ficha D&D 3.5</h1><p>Conectando...</p></section></div>
 <script>
 
 (()=>{'use strict';
@@ -258,7 +295,7 @@ const SK=SKILLS.filter((v,i)=>!['Arte da Fuga? (alias)','Equilíbrio (Balance)',
 const NAV=[['personagem','⚔','Personagem'],['racas','✦','Raças'],['combate','🛡','Combate'],['pericias','✧','Perícias'],['inventario','◈','Inventário'],['magias','✴','Magias'],['detalhes','▤','Talentos e notas'],['tutorial','?','Tutorial'],['config','⚙','Configurações']];
 const uid=()=>String(Date.now())+Math.random().toString(36).slice(2,8);const num=x=>Number(x)||0;const sign=x=>x>=0?'+'+x:String(x);const enc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const nfmt=x=>Number.isInteger(x)?String(x):String(Math.round(x*100)/100);const mr=(x)=>Math.floor((num(x)-10)/2);
 function defaultState(){return {id:uid(),name:'Novo aventureiro',player:'',campaign:'',alignment:'',deity:'',age:'',height:'',weight:'',appearance:'',experience:0,creationComplete:false,creationStep:0,background:'',race:'Humano',raceCustom:{name:'',la:0,rhd:0,type:'Humanoide',size:'Médio',speed:9,notes:''},raceOverrides:{la:0,rhd:0,speed:0,size:'',type:'',mods:Object.fromEntries(AB.map(k=>[k,0]))},templates:[],templateLAExtra:0,laReduction:0,abilities:Object.fromEntries(AB.map(k=>[k,{base:10,magic:0,temp:0}])),classes:[{id:uid(),className:'Guerreiro',level:1,hd:10,bab:'full',fort:true,ref:false,will:false,skill:2}],hp:{mode:'manual',diceBase:0,bonus:0,maxManual:0,damage:0,nonlethal:0,temp:0},combat:{armor:0,shield:0,natural:0,deflection:0,dodge:0,acMisc:0,maxDex:99,armorACP:0,shieldACP:0,initiative:0,grapple:0,melee:0,ranged:0,speedMisc:0,fort:0,ref:0,will:0,resistances:'',conditions:''},attacks:[],skills:{},customSkills:[],equipment:[],money:{pp:0,gp:0,sp:0,cp:0},spells:[],spellSlots:[],feats:[],features:[],languages:'Comum',notes:'',lastSaved:Date.now()};}
-const STORE='grimorio35-v3';let db;try{db=JSON.parse(localStorage.getItem(STORE)||'null')}catch(_){db=null};if(!db||!db.characters||!Object.keys(db.characters).length){const s=defaultState();db={active:s.id,characters:{[s.id]:s},customRaces:[]}}if(!Array.isArray(db.customRaces))db.customRaces=[];for(let x of db.customRaces){if(x&&x.name&&!RACES.some(r=>r.name===x.name))RACES.push(x)}try{if(localStorage.getItem(STORE)&&!localStorage.getItem(STORE+'-backup-before-v10'))localStorage.setItem(STORE+'-backup-before-v10',localStorage.getItem(STORE));}catch(_){}let s=db.characters[db.active]||Object.values(db.characters)[0];let tab='personagem';
+let STORE='grimorio35-v3';let db;try{db=JSON.parse(localStorage.getItem(STORE)||'null')}catch(_){db=null};if(!db||!db.characters||!Object.keys(db.characters).length){const s=defaultState();db={active:s.id,characters:{[s.id]:s},customRaces:[]}}if(!Array.isArray(db.customRaces))db.customRaces=[];for(let x of db.customRaces){if(x&&x.name&&!RACES.some(r=>r.name===x.name))RACES.push(x)}try{if(localStorage.getItem(STORE)&&!localStorage.getItem(STORE+'-backup-before-v10'))localStorage.setItem(STORE+'-backup-before-v10',localStorage.getItem(STORE));}catch(_){}let s=db.characters[db.active]||Object.values(db.characters)[0];let tab='personagem';
 function normalize(o){let d=defaultState();let z={...d,...o};for(const key of ['raceCustom','raceOverrides','abilities','hp','combat','money'])z[key]={...d[key],...(o[key]||{})};for(const k of AB){z.abilities[k]={...d.abilities[k],...(o.abilities?.[k]||{})};z.raceOverrides.mods[k]=num(o.raceOverrides?.mods?.[k])}for(const k of ['classes','templates','attacks','equipment','spells','spellSlots','customSkills','feats','features'])if(!Array.isArray(z[k]))z[k]=[];if(!z.skills||typeof z.skills!=='object')z.skills={};if(z.hp.mode!=='manual'){z.hp.mode='manual';z.hp.diceBase=num(o.hp?.diceBase)}if(o.creationComplete===undefined)z.creationComplete=true;if(!Number.isInteger(z.creationStep))z.creationStep=0;return z;}
 s=normalize(s);db.characters[s.id]=s;db.active=s.id;
 function save(){s.lastSaved=Date.now();db.characters[s.id]=s;db.active=s.id;try{localStorage.setItem(STORE,JSON.stringify(db))}catch(_){toast('Espaço local indisponível. Exporte um JSON para não perder dados.')} }
@@ -25339,13 +25376,14 @@ if(!Array.isArray(db.players)||!db.players.length){
  db.players=[{id:uid(),name:'Meu perfil',avatar:V17_AVATARS[0],campaigns:[]}];
 }
 let v17PlayerId=db.players.some(p=>p.id===v17Prefs.playerId)?v17Prefs.playerId:db.players[0].id;
-for(const c of Object.values(db.characters))if(!db.players.some(p=>p.id===c.playerId))c.playerId=db.players[0].id;
+// Keep older/imported sheets unassigned until the player chooses an owner.
+for(const c of Object.values(db.characters))if(!db.players.some(p=>p.id===c.playerId))c.playerId='';
 let v17KnownIds=new Set(Object.keys(db.characters)),v17ProfileEditing=null;
 function v17Player(){return db.players.find(p=>p.id===v17PlayerId)||db.players[0]}
 function v17Characters(){return Object.values(db.characters).filter(c=>c.playerId===v17PlayerId)}
 function v17Avatar(p){return typeof p.photo==='string'&&/^data:image\/(png|jpeg|webp);base64,/.test(p.photo)?`<img src="${enc(p.photo)}" alt="Foto de ${enc(p.name)}">`:`<span aria-hidden="true">${V17_AVATARS.includes(p.avatar)?p.avatar:V17_AVATARS[0]}</span>`;}
 function v17AdoptNew(){for(const c of Object.values(db.characters)){if(!v17KnownIds.has(c.id)){c.playerId=v17PlayerId;if(!c.player)c.player=v17Player().name;v17KnownIds.add(c.id);}}}
-function v17Remember(){v17Prefs.playerId=v17PlayerId;if(s?.playerId===v17PlayerId)v17Prefs.lastCharacters[v17PlayerId]=s.id;try{localStorage.setItem(V17_PREF,JSON.stringify(v17Prefs));}catch(_){toast('Não foi possível lembrar o perfil neste navegador.');}}
+function v17Remember(){v17Prefs.playerId=v17PlayerId;if(s?.playerId===v17PlayerId)v17Prefs.lastCharacters[v17PlayerId]=s.id;try{localStorage.setItem(STORE.startsWith('grimorio35-v3-cloud-')?STORE+'-device-player':V17_PREF,JSON.stringify(v17Prefs));}catch(_){toast('Não foi possível lembrar o perfil neste navegador.');}}
 function v17EnsureCharacter(){const chars=v17Characters(),id=v17Prefs.lastCharacters[v17PlayerId];if(s?.playerId===v17PlayerId&&db.characters[s.id])return;const next=chars.find(c=>c.id===id)||chars[0];if(next){s=normalize(next);db.characters[s.id]=s;}else{s=defaultState();s.playerId=v17PlayerId;s.player=v17Player().name;db.characters[s.id]=s;v17KnownIds.add(s.id);}db.active=s.id;}
 const v17SaveBase=save;save=function(){v17AdoptNew();v17EnsureCharacter();v17SaveBase();v17Remember();};
 // Prefer this device's remembered character on startup, without changing another profile.
@@ -25356,17 +25394,371 @@ function v17SwitchPlayer(id){if(!db.players.some(p=>p.id===id))return;save();doc
 function v17SelectCharacter(id){const c=db.characters[id];if(!c||c.playerId!==v17PlayerId)return;save();s=normalize(c);db.active=id;save();tab='personagem';render();}
 function v17CreatePlayer(name,avatar=V17_AVATARS[0]){name=String(name||'').trim().slice(0,60);if(!name)throw Error('Digite o nome do jogador.');const p={id:uid(),name,avatar:V17_AVATARS.includes(avatar)?avatar:V17_AVATARS[0],campaigns:[]};db.players.push(p);v17SwitchPlayer(p.id);return p;}
 function v17MoveCharacter(id,destination){const c=db.characters[id],p=db.players.find(x=>x.id===destination);if(!c||c.playerId!==v17PlayerId||!p)throw Error('Escolha um personagem e um jogador válidos.');save();c.playerId=p.id;c.player=p.name;if(s.id===id)s=null;v17EnsureCharacter();save();render();}
-function v17Hub(){const p=v17Player(),chars=v17Characters(),campaigns=[...new Set([...(p.campaigns||[]),...chars.map(c=>c.campaign)].map(x=>String(x||'').trim()).filter(Boolean))];return `<section class="panel"><div class="section-head"><h2>Jogadores</h2><button class="btn" data-v17-new-profile>+ Novo jogador</button></div><p class="muted">Selecione um perfil para ver suas fichas.</p><div class="v17-profile-grid">${db.players.map(x=>`<button class="v17-profile ${x.id===p.id?'active':''}" data-v17-profile="${enc(x.id)}" aria-pressed="${x.id===p.id}"><span class="v17-avatar">${v17Avatar(x)}</span><strong>${enc(x.name)}</strong>${x.id===p.id?'<small>Perfil selecionado</small>':'<small>Abrir perfil</small>'}</button>`).join('')}</div></section><section class="panel"><div class="section-head"><div class="v17-profile-title"><span class="v17-avatar">${v17Avatar(p)}</span><div><h2>${enc(p.name)}</h2><p class="muted">Seu espaço de aventuras</p></div></div><button class="btn" data-v17-edit-profile>Editar perfil</button></div><h3>Campanhas</h3><div class="pills">${campaigns.length?campaigns.map(c=>`<span class="chip">${enc(c)}</span>`).join(''):'<p class="muted">Adicione suas campanhas em Editar perfil ou na identidade do personagem.</p>'}</div></section><section class="panel"><div class="section-head"><h2>Personagens de ${enc(p.name)}</h2><button class="btn primary" data-action="new">+ Criar personagem</button></div><div class="v17-character-grid">${chars.map(c=>`<article class="v17-character"><div><h3>${enc(c.name||'Novo aventureiro')}</h3><p class="muted">${enc(c.race||'')} · ${enc((c.classes||[]).map(k=>k.className+' '+num(k.level)).join(' / '))}</p><p>${enc(c.campaign||'Sem campanha')} · ${c.creationComplete?'Ficha pronta':'Criação em andamento'}</p></div><div class="actions"><button class="btn primary" data-v17-character="${enc(c.id)}">${c.creationComplete?'Abrir ficha':'Continuar criação'}</button>${db.players.length>1?`<button class="btn small" data-v17-transfer="${enc(c.id)}">Mudar jogador</button>`:''}</div></article>`).join('')}</div></section><section class="panel"><h3>Dados neste navegador</h3><p>O último perfil e a última ficha são lembrados neste navegador. As fichas ficam separadas por jogador, mas os perfis locais não têm senha.</p><p class="muted">A publicação do HTML no GitHub não sincroniza os dados entre computadores. Para levar uma ficha a outro computador, exporte em Configurações e importe no perfil desejado.</p></section>`;}
+function v17Hub(){const p=v17Player(),chars=v17Characters(),campaigns=[...new Set([...(p.campaigns||[]),...chars.map(c=>c.campaign)].map(x=>String(x||'').trim()).filter(Boolean))];return `<section class="panel"><div class="section-head"><h2>Jogadores</h2><button class="btn" data-v17-new-profile>+ Novo jogador</button></div><p class="muted">Selecione um perfil para ver suas fichas.</p><div class="v17-profile-grid">${db.players.map(x=>`<button class="v17-profile ${x.id===p.id?'active':''}" data-v17-profile="${enc(x.id)}" aria-pressed="${x.id===p.id}"><span class="v17-avatar">${v17Avatar(x)}</span><strong>${enc(x.name)}</strong>${x.id===p.id?'<small>Perfil selecionado</small>':'<small>Abrir perfil</small>'}</button>`).join('')}</div></section><section class="panel"><div class="section-head"><div class="v17-profile-title"><span class="v17-avatar">${v17Avatar(p)}</span><div><h2>${enc(p.name)}</h2><p class="muted">Seu espaço de aventuras</p></div></div><button class="btn" data-v17-edit-profile>Editar perfil</button></div><h3>Campanhas</h3><div class="pills">${campaigns.length?campaigns.map(c=>`<span class="chip">${enc(c)}</span>`).join(''):'<p class="muted">Adicione suas campanhas em Editar perfil ou na identidade do personagem.</p>'}</div></section><section class="panel"><div class="section-head"><h2>Personagens de ${enc(p.name)}</h2><button class="btn primary" data-action="new">+ Criar personagem</button></div><div class="v17-character-grid">${chars.map(c=>`<article class="v17-character"><div><h3>${enc(c.name||'Novo aventureiro')}</h3><p class="muted">${enc(c.race||'')} · ${enc((c.classes||[]).map(k=>k.className+' '+num(k.level)).join(' / '))}</p><p>${enc(c.campaign||'Sem campanha')} · ${c.creationComplete?'Ficha pronta':'Criação em andamento'}</p></div><div class="actions"><button class="btn primary" data-v17-character="${enc(c.id)}">${c.creationComplete?'Abrir ficha':'Continuar criação'}</button></div></article>`).join('')}</div></section><section class="panel"><h3>Dados neste navegador</h3><p>O último perfil e a última ficha são lembrados neste navegador. As fichas ficam separadas por jogador, mas os perfis locais não têm senha.</p><p class="muted">A publicação do HTML no GitHub não sincroniza os dados entre computadores. Para levar uma ficha a outro computador, exporte em Configurações e importe no perfil desejado.</p></section>`;}
 function v17Dialog(){let d=document.getElementById('v17-player-dialog');if(!d){d=document.createElement('dialog');d.id='v17-player-dialog';d.className='v12-dialog';document.body.appendChild(d);d.addEventListener('click',e=>{if(e.target===d)d.close();});}return d;}
 function v17EditProfile(isNew=false){const p=isNew?{name:'',avatar:V17_AVATARS[0],campaigns:[]}:v17Player();v17ProfileEditing={...p,campaigns:[...(p.campaigns||[])],isNew};const d=v17Dialog();d.innerHTML=`<form id="v17-profile-form"><h2>${isNew?'Novo jogador':'Editar perfil'}</h2><label>Nome do jogador<input class="inline-input" id="v17-player-name" maxlength="60" required value="${enc(p.name)}"></label><label>Campanhas <span class="muted">(uma por linha)</span><textarea class="inline-input" id="v17-campaigns" rows="3">${enc((p.campaigns||[]).join('\n'))}</textarea></label><p>Escolha um avatar</p><div class="v17-avatar-options">${V17_AVATARS.map(a=>`<label><input type="radio" name="v17-avatar" value="${a}" ${a===p.avatar?'checked':''}><span>${a}</span></label>`).join('')}</div><label>Foto de perfil<input id="v17-photo" type="file" accept="image/png,image/jpeg,image/webp"></label><div class="v17-photo-preview v17-avatar">${v17Avatar(p)}</div><button type="button" class="btn small" data-v17-clear-photo>Usar apenas avatar</button><p role="alert" id="v17-profile-error"></p><div class="actions"><button class="btn primary" type="submit">Salvar perfil</button><button class="btn" type="button" data-v17-close>Cancelar</button></div></form>`;d.showModal();}
 const v17ActionBase=action;action=function(which){if(which==='delete'){if(!confirm(`Excluir ${s.name||'personagem'} do armazenamento local?`))return;delete db.characters[s.id];s=null;v17EnsureCharacter();save();render();toast('Personagem excluído');return;}return v17ActionBase(which);};
 const v17RenderBase=render;render=function(){v17AdoptNew();v17EnsureCharacter();v17RenderBase();const nav=document.getElementById('navigation');nav.insertAdjacentHTML('beforeend',`<button class="nav-btn ${tab==='jogador'?'active':''}" data-v17-hub><span>👤</span>Jogador</button>`);const content=document.getElementById('content');if(tab==='jogador'){document.querySelector('.top').style.display='none';document.getElementById('stats').style.display='none';content.innerHTML=v17Hub();}else if(tab==='personagem'){const p=v17Player();content.insertAdjacentHTML('afterbegin',`<div class="v17-player-bar"><button class="btn v17-player-button" data-v17-hub><span class="v17-avatar">${v17Avatar(p)}</span><span><small>Jogador</small><strong>${enc(p.name)}</strong></span><span>▾</span></button></div>`);}v17Remember();try{localStorage.setItem(STORE,JSON.stringify(db));}catch(_){toast('Não foi possível salvar. Exporte suas fichas.');}};
 document.addEventListener('click',e=>{const b=e.target.closest('[data-v17-hub],[data-v17-profile],[data-v17-character],[data-v17-new-profile],[data-v17-edit-profile],[data-v17-close],[data-v17-clear-photo],[data-v17-transfer],[data-v17-transfer-confirm]');if(!b)return;if(b.hasAttribute('data-v17-hub')){save();tab='jogador';render();}else if(b.dataset.v17Profile)v17SwitchPlayer(b.dataset.v17Profile);else if(b.dataset.v17Character)v17SelectCharacter(b.dataset.v17Character);else if(b.hasAttribute('data-v17-new-profile'))v17EditProfile(true);else if(b.hasAttribute('data-v17-edit-profile'))v17EditProfile();else if(b.hasAttribute('data-v17-close'))v17Dialog().close();else if(b.hasAttribute('data-v17-clear-photo')){delete v17ProfileEditing.photo;document.querySelector('.v17-photo-preview').innerHTML=v17Avatar(v17ProfileEditing);}else if(b.dataset.v17Transfer){const c=db.characters[b.dataset.v17Transfer];if(c?.playerId!==v17PlayerId)return;const d=v17Dialog();d.innerHTML=`<h2>Mudar jogador</h2><p>Mover <b>${enc(c.name)}</b> para outro perfil? Ela deixará de aparecer no perfil atual.</p><label>Jogador de destino<select class="inline-input" id="v17-transfer-destination">${db.players.filter(p=>p.id!==v17PlayerId).map(p=>opt(p.id,p.name,'')).join('')}</select></label><div class="actions"><button class="btn primary" data-v17-transfer-confirm="${enc(c.id)}">Mover ficha</button><button class="btn" data-v17-close>Cancelar</button></div>`;d.showModal();}else if(b.dataset.v17TransferConfirm){v17MoveCharacter(b.dataset.v17TransferConfirm,document.getElementById('v17-transfer-destination').value);v17Dialog().close();}});
-document.addEventListener('submit',e=>{if(e.target.id!=='v17-profile-form')return;e.preventDefault();try{const draft=v17ProfileEditing,name=document.getElementById('v17-player-name').value.trim();if(!name)throw Error('Digite o nome do jogador.');const campaigns=document.getElementById('v17-campaigns').value.split('\n').map(x=>x.trim().slice(0,100)).filter(Boolean).slice(0,30),avatar=document.querySelector('input[name="v17-avatar"]:checked')?.value||V17_AVATARS[0];let p;if(draft.isNew)p=v17CreatePlayer(name,avatar);else p=v17Player();Object.assign(p,{name:name.slice(0,60),campaigns,avatar});if(draft.photo)p.photo=draft.photo;else delete p.photo;save();v17Dialog().close();tab='jogador';render();}catch(err){document.getElementById('v17-profile-error').textContent=err.message;}});
+document.addEventListener('submit',e=>{if(e.target.id!=='v17-profile-form')return;e.preventDefault();try{const draft=v17ProfileEditing,name=document.getElementById('v17-player-name').value.trim();if(!name)throw Error('Digite o nome do jogador.');const campaigns=document.getElementById('v17-campaigns').value.split('\n').map(x=>x.trim().slice(0,100)).filter(Boolean).slice(0,30),avatar=document.querySelector('input[name="v17-avatar"]:checked')?.value||V17_AVATARS[0];const priorSheetIds=draft.isNew?Object.values(db.characters).filter(c=>c&&c.id&&!v18BlankSheet(c)&&!db.players.some(p=>p.id===c.playerId)).map(c=>c.id):[];let p;if(draft.isNew)p=v17CreatePlayer(name,avatar);else p=v17Player();const previousName=p.name;Object.assign(p,{name:name.slice(0,60),campaigns,avatar});if(p.name!==previousName)for(const c of Object.values(db.characters))if(c.playerId===p.id&&(!c.player||c.player===previousName))c.player=p.name;if(draft.photo)p.photo=draft.photo;else delete p.photo;save();v17Dialog().close();tab='jogador';render();if(draft.isNew&&priorSheetIds.length)queueMicrotask(()=>v18AssignmentDialog(priorSheetIds,true));}catch(err){document.getElementById('v17-profile-error').textContent=err.message;}});
 document.addEventListener('change',async e=>{if(e.target.id!=='v17-photo')return;const f=e.target.files?.[0],draft=v17ProfileEditing;if(!f)return;const error=document.getElementById('v17-profile-error');try{if(f.size>2e6||!/^image\/(png|jpeg|webp)$/.test(f.type))throw Error('Escolha uma imagem PNG, JPG ou WebP de até 2 MB.');const url=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(Error('Não foi possível ler a imagem.'));r.readAsDataURL(f);});if(v17ProfileEditing!==draft)return;draft.photo=url;document.querySelector('.v17-photo-preview').innerHTML=v17Avatar(draft);error.textContent='';}catch(err){error.textContent=err.message;}});
 
-RULES.push(['Uso da ficha','Jogadores: separar e organizar personagens',`<div class="v16-lesson"><p>Pense em cada jogador como uma pasta de personagens. Escolha o jogador e veja apenas as fichas ligadas a ele.</p><ol><li>Abra <b>Jogador</b> no menu ou pelo botão no alto da ficha e da criação.</li><li>Use <b>Novo jogador</b>, informe o nome e escolha um avatar ou foto. As campanhas são opcionais, uma por linha.</li><li>Selecione o perfil antes de criar ou importar uma ficha: ela ficará nesse perfil.</li><li>Para organizar fichas antigas, abra <b>Meu perfil</b> e use <b>Mudar jogador</b> no personagem.</li></ol><p><b>Exemplo:</b> Ana e Bruno usam o mesmo navegador. Ao escolher Ana, aparecem as fichas de Ana; escolhendo Bruno, aparecem as dele.</p><h4>O que fica salvo?</h4><p>O navegador lembra o último jogador e a última ficha de cada perfil. As fichas anteriores ficam inicialmente em Meu perfil, sem serem apagadas. Você pode renomeá-lo.</p><p>Esta organização é local e não exige cadastro. Os perfis não têm senha. Em outro computador, as fichas não aparecem automaticamente: exporte e importe a ficha para transferi-la. Publicar o site no GitHub não transfere os dados salvos no navegador.</p></div>`,'Funcionamento desta ficha — armazenamento local']);
+RULES.push(['Uso da ficha','Jogadores: separar e organizar personagens',`<div class="v16-lesson"><p>Pense em cada jogador como uma pasta de personagens. Escolha o jogador e veja apenas as fichas ligadas a ele.</p><ol><li>Abra <b>Jogador</b> no menu ou pelo botão no alto da ficha e da criação.</li><li>Use <b>Novo jogador</b>, informe o nome e escolha um avatar ou foto. As campanhas são opcionais, uma por linha.</li><li>Selecione o perfil antes de criar ou importar uma ficha: ela ficará nesse perfil.</li><li>Para associar fichas antigas ou mudar o jogador de uma ficha, abra <b>Configurações</b> e use <b>Organizar fichas</b>.</li></ol><p><b>Exemplo:</b> Ana e Bruno usam o mesmo navegador. Ao escolher Ana, aparecem as fichas de Ana; escolhendo Bruno, aparecem as dele.</p><h4>O que fica salvo?</h4><p>O navegador lembra o último jogador e a última ficha de cada perfil. Fichas antigas sem jogador são preservadas. Ao criar um perfil, a organização aparece apenas quando há fichas existentes sem perfil. Para trocar o jogador das demais fichas, use Configurações > Organizar fichas.</p><p>Esta organização é local e não exige cadastro. Os perfis não têm senha. Em outro computador, as fichas não aparecem automaticamente: exporte e importe a ficha para transferi-la. Publicar o site no GitHub não transfere os dados salvos no navegador.</p></div>`,'Funcionamento desta ficha — armazenamento local']);
 RULES.push(['Uso da ficha','Pesquisar e escolher itens do catálogo',`<div class="v16-lesson"><p>Abra o inventário e clique em <b>Adicionar item</b>. A pesquisa procura em armas, armaduras, equipamentos e itens mágicos ao mesmo tempo.</p><ol><li>Digite o nome ou parte dele no campo Pesquisar.</li><li>Escolha o resultado diretamente em <b>Item do catálogo</b>. A descrição, o preço e o peso mudam quando você troca a seleção.</li><li>Confira a quantidade e escolha Adicionar ou Comprar. Comprar pede confirmação e desconta as moedas.</li></ol><p><b>Exemplo:</b> digite “poção” para listar poções ou “armadura de couro” para encontrar essa armadura.</p><p>Para criar algo próprio, escolha <b>Personalizado</b> na lista e informe seu tipo e seus dados. Entradas de referência sem valores definidos precisam de conferência antes da compra.</p></div>`,'Funcionamento desta ficha — inventário']);
+
+
+// --- v18: organizacao assistida de fichas e exclusao segura de perfis ---
+function v18BlankSheet(c){return !c.creationComplete && !c.creationStep && (!c.name||c.name==='Novo aventureiro') && !(c.equipment||[]).length && !(c.feats||[]).length && !(c.spells||[]).length && !c.background && !c.notes;}
+function v18Dlg(){let d=document.getElementById('v18-dialog');if(!d){d=document.createElement('dialog');d.id='v18-dialog';document.body.appendChild(d);}return d;}
+function v18AssignmentDialog(ids=null,afterNew=false){
+ const characters=(ids?ids.map(id=>db.characters[id]).filter(Boolean):Object.values(db.characters).filter(c=>!v18BlankSheet(c)));
+ if(!characters.length){toast('Não há fichas antigas para organizar.');return;}
+ const d=v18Dlg(),unassigned=characters.filter(c=>!db.players.some(p=>p.id===c.playerId)).length;
+ d.innerHTML=`<form id="v18-map-form"><h2>Organizar fichas existentes</h2><p class="muted">${afterNew?'Existem fichas sem perfil. Escolha quem será o jogador de cada uma.':'Escolha a qual jogador cada ficha pertence.'} Nenhuma ficha será apagada. Você também pode deixar alguma sem perfil por enquanto.</p>${unassigned?`<p class="info warn">${unassigned} ficha(s) ainda não têm perfil definido.</p>`:''}<div class="v18-mapping-list">${characters.map(c=>`<label class="v18-mapping-row"><span><strong>${enc(c.name||'Aventureiro sem nome')}</strong><small>${enc(c.campaign||'Sem campanha')} · ${c.creationComplete?'Ficha pronta':'Em criação'}</small></span><select data-v18-sheet="${enc(c.id)}"><option value="">Sem perfil (organizar depois)</option>${db.players.map(p=>`<option value="${enc(p.id)}" ${c.playerId===p.id?'selected':''}>${enc(p.name)}</option>`).join('')}</select></label>`).join('')}</div><div class="actions"><button class="btn primary" type="submit">Salvar organização</button><button class="btn" type="button" data-v18-dismiss>Fazer depois</button></div></form>`;
+ d.showModal();
+}
+function v18SettingsPanel(){
+ return `<section class="panel"><div class="section-head"><h2>Gerenciar perfis dos jogadores</h2><button type="button" class="btn" data-v18-organize>Organizar fichas</button></div><p class="muted">Exclua apenas o perfil. As fichas serão transferidas para outro jogador, sem serem apagadas.</p><div class="v18-profile-settings">${db.players.map(p=>{const total=Object.values(db.characters).filter(c=>c.playerId===p.id).length;return `<div class="v18-profile-row"><div class="v18-meta"><span class="v17-avatar">${v17Avatar(p)}</span><span><strong>${enc(p.name)}</strong><small>${total} ficha(s) vinculada(s)</small></span></div><button type="button" class="btn danger small" data-v18-delete="${enc(p.id)}" ${db.players.length<2?'disabled title="Crie outro perfil para excluir este"':''}>Excluir perfil</button></div>`;}).join('')}</div>${db.players.length<2?'<p class="help">Para excluir o único perfil, crie outro jogador primeiro. Isso preserva suas fichas.</p>':''}<div class="actions" style="margin-top:12px"><button type="button" class="btn" data-v18-backup>Baixar backup de todos os perfis e fichas</button><label class="btn" for="v18-import-library" style="cursor:pointer">Restaurar backup completo</label><input id="v18-import-library" type="file" accept="application/json,.json" hidden></div></section>`;
+}
+const v18SettingsBase=renderSettings;
+renderSettings=function(){return v18SettingsPanel()+v18SettingsBase();};
+function v18Backup(){
+ const payload={format:'Grimorio35Biblioteca',version:18,exportedAt:new Date().toISOString(),library:db};
+ const data=JSON.stringify(payload,null,2),url=URL.createObjectURL(new Blob([data],{type:'application/json'})),a=document.createElement('a');
+ a.href=url;a.download='Backup_Completo_Fichas_e_Perfis_DND35.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ toast('Backup completo gerado. Guarde esse arquivo em local seguro.');
+}
+function v18AskDeleteProfile(id){
+ const p=db.players.find(p=>p.id===id);if(!p)return;
+ if(db.players.length<2){toast('Crie outro perfil antes de excluir este.');return;}
+ const others=db.players.filter(x=>x.id!==id),linked=Object.values(db.characters).filter(c=>c.playerId===id),d=v18Dlg();
+ d.innerHTML=`<form id="v18-delete-form" data-v18-id="${enc(id)}"><h2>Excluir perfil: ${enc(p.name)}</h2><p>O perfil será excluído, mas <strong>nenhuma ficha será apagada</strong>.</p>${linked.length?`<p>As ${linked.length} ficha(s) deste jogador serão transferidas para:</p><select id="v18-destination" class="inline-input" required>${others.map(x=>`<option value="${enc(x.id)}">${enc(x.name)}</option>`).join('')}</select>`:'<p class="muted">Este perfil não possui fichas vinculadas.</p>'}<p class="info warn">Essa ação não pode ser desfeita automaticamente. Recomendamos baixar um backup completo antes.</p><div class="actions"><button type="submit" class="btn danger">Confirmar exclusão</button><button type="button" class="btn" data-v18-dismiss>Cancelar</button></div></form>`;
+ d.showModal();
+}
+function v18DeleteProfile(id,to){
+ if(db.players.length<2)return;
+ const p=db.players.find(p=>p.id===id),dest=db.players.find(p=>p.id===to&&p.id!==id);
+ if(!p||!dest)return;
+ for(const c of Object.values(db.characters))if(c.playerId===id){c.playerId=dest.id;c.player=dest.name;}
+ db.players=db.players.filter(p=>p.id!==id);
+ delete v17Prefs.lastCharacters[id];
+ if(v17PlayerId===id){v17PlayerId=dest.id;s=null;}
+ v17EnsureCharacter();save();render();toast(`Perfil excluído. Fichas preservadas em ${dest.name}.`);
+}
+
+async function v18RestoreBackup(file){
+ if(!file)return;
+ try{
+  if(file.size>25e6)throw Error('Este backup é grande demais para importar diretamente.');
+  const payload=JSON.parse(await file.text());
+  if(payload?.format!=='Grimorio35Biblioteca'||!payload.library||!Array.isArray(payload.library.players)||!payload.library.characters||typeof payload.library.characters!=='object')throw Error('O arquivo escolhido não é um backup completo de perfis e fichas.');
+  const incoming=payload.library;
+  if(!incoming.players.length)throw Error('Backup sem jogadores.');
+  if(!Object.keys(incoming.characters).length)throw Error('Backup sem fichas.');
+  if(!confirm(`Este backup possui ${incoming.players.length} perfil(is) e ${Object.keys(incoming.characters).length} ficha(s). Deseja RESTAURÁ-LO neste navegador? Os dados atuais serão substituídos. Recomenda-se baixar um backup dos dados atuais antes.`))return;
+  v18Backup();
+  try{localStorage.setItem(STORE+'-before-full-restore',JSON.stringify(db));}catch(_){}
+  db={...incoming,players:incoming.players.filter(p=>p&&p.id&&p.name),characters:Object.fromEntries(Object.entries(incoming.characters).filter(([id,c])=>id&&c&&c.id))};
+  if(!db.players.length||!Object.keys(db.characters).length)throw Error('Backup não contém fichas e perfis válidos.');
+  if(!Array.isArray(db.customRaces))db.customRaces=[];
+  for(const r of db.customRaces)if(r&&r.name&&!RACES.some(x=>x.name===r.name))RACES.push(r);
+  v17KnownIds=new Set(Object.keys(db.characters));v17PlayerId=db.players[0].id;v17Prefs.lastCharacters={};
+  s=null;v17EnsureCharacter();save();tab='jogador';render();toast('Backup completo restaurado com sucesso.');
+  if(Object.values(db.characters).some(c=>!v18BlankSheet(c)&&!db.players.some(p=>p.id===c.playerId)))queueMicrotask(()=>v18AssignmentDialog(Object.values(db.characters).filter(c=>!v18BlankSheet(c)&&!db.players.some(p=>p.id===c.playerId)).map(c=>c.id),true));
+ }catch(err){alert('Não foi possível restaurar: '+(err?.message||String(err)));}
+}
+document.addEventListener('change',e=>{
+ if(e.target.id!=='v18-import-library')return;
+ const file=e.target.files?.[0];e.target.value='';if(file)v18RestoreBackup(file);
+});
+document.addEventListener('click',e=>{
+ const el=e.target.closest('[data-v18-organize],[data-v18-delete],[data-v18-dismiss],[data-v18-backup]');if(!el)return;
+ if(el.hasAttribute('data-v18-organize'))v18AssignmentDialog();
+ else if(el.hasAttribute('data-v18-delete'))v18AskDeleteProfile(el.dataset.v18Delete);
+ else if(el.hasAttribute('data-v18-dismiss'))v18Dlg().close();
+ else if(el.hasAttribute('data-v18-backup'))v18Backup();
+});
+document.addEventListener('submit',e=>{
+ if(e.target.id==='v18-map-form'){
+  e.preventDefault();
+  const rows=[...e.target.querySelectorAll('[data-v18-sheet]')];
+  for(const row of rows){const c=db.characters[row.dataset.v18Sheet];if(!c)continue;const owner=db.players.find(p=>p.id===row.value);c.playerId=owner?.id||'';c.player=owner?.name||'';}
+  if(s?.playerId!==v17PlayerId)s=null;
+  v17EnsureCharacter();save();v18Dlg().close();render();toast('Fichas organizadas. Nenhum personagem foi excluído.');
+ }else if(e.target.id==='v18-delete-form'){
+  e.preventDefault();const id=e.target.dataset.v18Id,to=document.getElementById('v18-destination')?.value||db.players.find(p=>p.id!==id)?.id;
+  v18Dlg().close();v18DeleteProfile(id,to);
+ }
+});
+
+// v19 — contas individuais, campanhas e comentários em fichas (Firebase)
+// Este módulo é executado DENTRO do closure original da ficha, antes do render final.
+const V19_FIREBASE={apiKey:'AIzaSyC66YdnK1e2Qs5B_p3mirA8G0ZxqD7rEaY',authDomain:'ficha-aut.firebaseapp.com',projectId:'ficha-aut',appId:'1:827447445119:web:b96fe7f3a3ace16536e14a'};
+const V19_SDK='https://www.gstatic.com/firebasejs/11.10.0/';
+const v19Root=document.getElementById('v19-root');
+let v19F=null,v19Auth=null,v19User=null,v19Profile=null,v19Ready=false,v19Mode='',v19Timer=null,v19Saving=false,v19NeedsSave=false,v19Hashes=new Map(),v19Published=new Map(),v19ProfileHash='',v19Legacy=null,v19LastCommentUnsub=null,v19Comments=[],v19ManagerCampaign=null,v19ManagerSheets=[],v19MasterComments=[],v19Busy=false;
+try{v19Legacy=JSON.parse(localStorage.getItem('grimorio35-v3')||'null')}catch(_){v19Legacy=null}
+const v19Esc=x=>enc(String(x??''));
+function v19RootView(html){v19Root.innerHTML=html;v19Root.hidden=false;}
+function v19Status(msg,error=false){const e=v19Root.querySelector('#v19-status');if(e){e.textContent=msg||'';e.style.color=error?'#f6a2a7':'#a8d9aa';}}
+function v19Wait(message='Conectando ao banco de dados...'){document.body.className='v19-gated';v19RootView(`<section class="v19-auth-panel"><h1>⚔️ Ficha D&D 3.5</h1><p>${v19Esc(message)}</p><p class="muted">Suas fichas antigas neste navegador não serão apagadas.</p></section>`)}
+function v19AuthView(register=false){document.body.className='v19-gated';v19RootView(`<section class="v19-auth-panel"><div class="eyebrow">Dungeons & Dragons 3.5e</div><h1>${register?'Criar conta':'Entrar na ficha'}</h1><p class="muted">${register?'Escolha o tipo de conta e crie seu perfil.':'Entre com o e-mail cadastrado para ver apenas seus dados.'}</p><form id="v19-auth-form"><label>E-mail<input name="email" class="inline-input" type="email" autocomplete="email" required></label><label>Senha<input name="password" class="inline-input" type="password" autocomplete="${register?'new-password':'current-password'}" minlength="6" required></label>${register?`<label>Nome do perfil<input name="name" class="inline-input" maxlength="60" required></label><label>Tipo de conta<select name="role" class="inline-input"><option value="jogador">Jogador — cria e edita suas fichas</option><option value="mestre">Mestre — organiza campanhas, lê fichas e comenta</option></select></label>`:''}<button type="submit" class="btn primary">${register?'Cadastrar':'Entrar'}</button></form><p id="v19-status" role="alert"></p><button class="btn ghost" data-v19-toggle="${register?'login':'register'}">${register?'Já tenho conta':'Criar uma conta'}</button>${!register?'<button class="btn ghost" data-v19-reset>Esqueci minha senha</button>':''}</section>`);}
+function v19CompleteView(){document.body.className='v19-gated';v19RootView(`<section class="v19-auth-panel"><h1>Finalizar cadastro</h1><p>Escolha seu perfil para concluir a criação da conta.</p><form id="v19-complete-form"><label>Nome<input name="name" class="inline-input" maxlength="60" required></label><label>Tipo de conta<select name="role" class="inline-input"><option value="jogador">Jogador</option><option value="mestre">Mestre</option></select></label><button class="btn primary">Criar meu perfil</button></form><p id="v19-status"></p><button class="btn" data-v19-logout>Sair</button></section>`)}
+function v19Err(e){const codes={'auth/email-already-in-use':'Este e-mail já está cadastrado. Use Entrar.','auth/invalid-credential':'E-mail ou senha incorretos.','auth/weak-password':'A senha precisa ter pelo menos 6 caracteres.','auth/invalid-email':'Digite um e-mail válido.','auth/too-many-requests':'Muitas tentativas. Tente mais tarde.','permission-denied':'Acesso negado pelo Firestore. Publique as regras de segurança da versão nova.','auth/requires-recent-login':'Por segurança, entre novamente na sua conta antes de excluir.'};return codes[e?.code]||e?.message||String(e)}
+function v19ProfileData(name,role){return {name:String(name||'').trim().slice(0,60),role,avatar:role==='mestre'?'🔮':'🧙',campaignIds:[],createdAt:Date.now()}}
+async function v19Register(email,password,name,role){const cred=await v19F.createUserWithEmailAndPassword(v19Auth,email,password);v19User=cred.user;await v19F.setDoc(v19F.doc(v19F.db,'users',cred.user.uid),v19ProfileData(name,role));await v19Enter(cred.user)}
+async function v19Enter(user){
+ v19User=user;v19Ready=false;v19Wait('Carregando sua conta...');
+ const ref=v19F.doc(v19F.db,'users',user.uid),doc=await v19F.getDoc(ref);
+ if(!doc.exists()){v19CompleteView();return;}
+ const p=doc.data();if(!['jogador','mestre'].includes(p.role))throw Error('Tipo de conta inválido.');v19Profile=p;v19Mode=p.role;
+ if(p.role==='mestre'){v19MasterView();return;}
+ try{if(v19Legacy?.characters&&!localStorage.getItem('grimorio35-v3-migration-owner'))localStorage.setItem('grimorio35-v3-migration-owner',user.uid)}catch(_){}
+ await v19LoadPlayer();
+}
+async function v19LoadPlayer(){
+ v19Ready=false;v19Wait('Carregando personagens salvos...');
+ const uid=v19User.uid,results=await v19F.getDocs(v19F.collection(v19F.db,'users',uid,'characters'));
+ const characters={};v19Hashes=new Map();v19Published=new Map();
+ results.forEach(snap=>{const x=snap.data(),c=x.data;if(!c||typeof c!=='object'||!c.id)return;characters[c.id]=normalize(c);v19Hashes.set(c.id,v19Fingerprint(c));if(c.v19CampaignId)v19Published.set(c.id,c.v19CampaignId)});
+ // Nunca misturar dados de contas distintas no mesmo localStorage.
+ STORE='grimorio35-v3-cloud-'+uid;
+ v17Prefs={lastCharacters:{}};try{Object.assign(v17Prefs,JSON.parse(localStorage.getItem(STORE+'-device-player')||'{}'))}catch(_){};
+ if(!v17Prefs.lastCharacters)v17Prefs.lastCharacters={};
+ db={active:Object.keys(characters)[0]||null,characters,customRaces:[],players:[{id:uid,name:v19Profile.name,avatar:v19Profile.avatar||'🧙',campaigns:[]}]};
+ v17PlayerId=uid;s=null;v17KnownIds=new Set(Object.keys(characters));v19ProfileHash=v19ProfileFingerprint();v19Ready=true;
+ v17EnsureCharacter();tab='jogador';render();v19PlayerMode();v19QueueSave();
+}
+function v19Fingerprint(c){const x={...c};delete x.lastSaved;return JSON.stringify(x)}
+function v19ProfileFingerprint(){return JSON.stringify({name:v19Profile?.name,avatar:v19Profile?.avatar})}
+let v19Unloading=false;let v19CommentsCache={key:'',at:0,items:[]};
+function v19QueueSave(){if(!v19Ready||v19Mode!=='jogador')return;v19NeedsSave=true;clearTimeout(v19Timer);v19Timer=setTimeout(()=>v19Flush().catch(e=>v19SaveError(e)),1400)}
+function v19SaveError(e){console.error('Erro Firebase:',e);toast('Falha ao salvar online. Exporte um backup e confira sua conexão.');const badge=document.getElementById('v19-sync');if(badge)badge.textContent='⚠ Falha na sincronização';}
+async function v19Flush(){
+ if(!v19Ready||v19Saving||v19Mode!=='jogador')return;
+ v19Saving=true;v19NeedsSave=false;
+ const f=v19F,uid=v19User.uid,items=Object.values(db.characters),ids=new Set(items.map(c=>c.id));
+ const badge=document.getElementById('v19-sync');if(badge)badge.textContent='Salvando...';
+ try{
+  const currentProfile=v19ProfileFingerprint();
+  if(currentProfile!==v19ProfileHash){await f.updateDoc(f.doc(f.db,'users',uid),{name:v19Profile.name,avatar:v19Profile.avatar});v19ProfileHash=currentProfile;}
+  for(const c of items){
+   if(!c?.id)continue;
+   const serialized=v19Fingerprint(c);
+   if(v19Hashes.get(c.id)===serialized)continue;
+   if(new Blob([JSON.stringify(c)]).size>850000)throw Error(`A ficha ${c.name||c.id} está muito grande para o Firestore. Reduza as imagens e exporte um backup.`);
+   await f.setDoc(f.doc(f.db,'users',uid,'characters',c.id),{ownerUid:uid,data:JSON.parse(JSON.stringify(c)),updatedAt:f.serverTimestamp()});
+   v19Hashes.set(c.id,serialized);
+   const old=v19Published.get(c.id),now=c.v19CampaignId||'';
+   if(old&&old!==now){await v19RemoveShared(old,c.id,uid);v19Published.delete(c.id)}
+   if(now){await f.setDoc(f.doc(f.db,'campaigns',now,'sheets',uid+'__'+c.id),{ownerUid:uid,characterId:c.id,ownerName:v19Profile.name,data:JSON.parse(JSON.stringify(c)),updatedAt:f.serverTimestamp()});v19Published.set(c.id,now)}
+  }
+  for(const id of [...v19Hashes.keys()])if(!ids.has(id)){
+   await f.deleteDoc(f.doc(f.db,'users',uid,'characters',id));v19Hashes.delete(id);
+   const camp=v19Published.get(id);if(camp){await v19RemoveShared(camp,id,uid);v19Published.delete(id)}
+  }
+  if(badge)badge.textContent='✓ Salvo na nuvem';
+ }catch(err){v19NeedsSave=true;throw err}finally{v19Saving=false;if(v19NeedsSave&&!v19Unloading){clearTimeout(v19Timer);v19Timer=setTimeout(()=>v19Flush().catch(v19SaveError),2500)}}
+}
+async function v19RemoveShared(cid,id,ownerUid){
+ const f=v19F,ref=f.doc(f.db,'campaigns',cid,'sheets',ownerUid+'__'+id);
+ const comments=await f.getDocs(f.collection(ref,'comments')).catch(()=>null);
+ if(comments)for(const comment of comments.docs)await f.deleteDoc(comment.ref);
+ await f.deleteDoc(ref).catch(()=>{});
+}
+function v19PlayerMode(){
+ document.body.className='v19-player-mode';v19Root.hidden=true;
+ const nav=document.getElementById('navigation');if(!nav.querySelector('[data-v19-logout]'))nav.insertAdjacentHTML('beforeend',`<div class="v19-user-nav"><span>${v19Esc(v19User.email)}</span><span class="v19-sync" id="v19-sync">Nuvem conectada</span><button class="nav-btn" data-v19-myprofile>👤 Editar meu perfil</button><button class="nav-btn" data-v19-logout>🚪 Sair</button></div>`);
+}
+function v19OwnHub(){
+ const p=v19Profile,chars=Object.values(db.characters).filter(x=>!v18BlankSheet(x));
+ return `<section class="panel"><div class="section-head"><div class="v17-profile-title"><span class="v17-avatar">${v19Esc(p.avatar||'🧙')}</span><div><h2>${v19Esc(p.name)}</h2><p class="muted">${v19Esc(v19User.email)} • Jogador</p></div></div><button class="btn" data-v19-myprofile>Editar meu perfil</button></div><p>Somente você pode ver ou editar suas fichas. Compartilhe com seu mestre vinculando uma ficha à campanha dele.</p></section><section class="panel"><div class="section-head"><h2>Minhas fichas</h2><button class="btn primary" data-action="new">+ Criar personagem</button></div><div class="v17-character-grid">${chars.map(c=>`<article class="v17-character"><div><h3>${v19Esc(c.name||'Aventureiro')}</h3><p class="muted">${v19Esc(c.race||'')} · ${v19Esc((c.classes||[]).map(x=>x.className+' '+x.level).join(' / '))}</p><p>${v19Esc(c.campaign||'Sem campanha')} ${c.v19CampaignId?'· Vinculada ao mestre':''}</p></div><div class="actions">${c.v19CampaignId?`<button type="button" class="btn small" data-v19-unlink="${v19Esc(c.id)}">Desvincular da campanha</button>`:''}<button class="btn primary" data-v17-character="${v19Esc(c.id)}">${c.creationComplete?'Abrir ficha':'Continuar criação'}</button></div></article>`).join('')||'<p class="muted">Você ainda não criou nenhuma ficha.</p>'}</div></section><section class="panel"><h2>Compartilhar uma ficha com o mestre</h2><p class="muted">Peça ao mestre o código da campanha. Ele poderá ver a ficha e fazer comentários, mas não poderá alterá-la.</p><form id="v19-join"><label>Personagem<select class="inline-input" name="character" required>${chars.map(c=>`<option value="${v19Esc(c.id)}">${v19Esc(c.name||'Aventureiro')}</option>`).join('')}</select></label><label>Código da campanha<input class="inline-input" name="campaign" maxlength="100" placeholder="Cole o código recebido do mestre" required></label><button class="btn primary" ${!chars.length?'disabled':''}>Vincular ficha à campanha</button><p id="v19-join-status" role="alert"></p></form></section>${(v19Legacy?.characters&&localStorage.getItem('grimorio35-v3-migration-owner')===v19User.uid)?`<section class="panel"><details><summary>Importar fichas antigas deste navegador</summary><p class="muted">As fichas antigas não são importadas automaticamente. Escolha apenas os personagens que pertencem à sua conta.</p><button class="btn" data-v19-legacy>Selecionar fichas antigas</button></details></section>`:''}`;
+}
+// Substitui o menu local de múltiplos perfis por UM perfil, vinculado ao e-mail.
+v17Hub=function(){return v19Ready?v19OwnHub():'';};
+// Configurações em um toggle compacto, apenas o perfil da conta atual.
+v18SettingsPanel=function(){return v19Ready?`<section class="panel v19-manage"><details><summary><b>Gerenciar meu perfil</b> <span class="muted">(abrir/fechar)</span></summary><div class="v19-manage-content"><p><b>${v19Esc(v19Profile.name)}</b> · ${v19Esc(v19User.email)}<br>Somente você gerencia esta conta.</p><div class="actions"><button class="btn" data-v19-myprofile>Editar perfil</button><button class="btn" data-v18-backup>Baixar backup das minhas fichas</button></div><p class="muted">Os personagens desta conta são seus. Não é possível transferir fichas diretamente para outro e-mail nesta tela.</p><button class="btn danger small" data-v19-delete-account>Excluir minha conta e minhas fichas</button></div></details></section>`:'';};
+// Evento delegado antigo abre a edição legada; capturamos ANTES para impedir múltiplos perfis.
+document.addEventListener('click',e=>{
+ const b=e.target.closest('[data-v17-new-profile],[data-v17-profile],[data-v17-edit-profile],[data-v18-delete],[data-v18-organize],[data-v18-restore]');
+ if(!b||!v19Ready)return;
+ e.preventDefault();e.stopImmediatePropagation();
+ if(b.hasAttribute('data-v17-edit-profile'))v19EditProfile();
+},true);
+// Não permitir que o restaurador local antigo substitua todo o estado de uma conta na nuvem.
+document.addEventListener('change',e=>{
+ if(v19Ready&&e.target.id==='v18-import-library'){
+  e.preventDefault();e.stopImmediatePropagation();e.target.value='';alert('Para importar fichas antigas com segurança, use a opção Importar fichas antigas no seu perfil.');
+ }
+},true);
+function v19EditProfile(){
+ const d=v18Dlg();d.innerHTML=`<form id="v19-edit-profile"><h2>Editar meu perfil</h2><label>Nome<input name="name" class="inline-input" maxlength="60" value="${v19Esc(v19Profile.name)}" required></label><label>Avatar<select name="avatar" class="inline-input">${V17_AVATARS.map(a=>`<option value="${a}" ${a===v19Profile.avatar?'selected':''}>${a}</option>`).join('')}</select></label><p class="muted">E-mail: ${v19Esc(v19User.email)} · ${v19Profile.role==='mestre'?'Mestre':'Jogador'}. O tipo de conta não pode ser alterado.</p><div class="actions"><button class="btn primary">Salvar alterações</button><button type="button" class="btn" data-v18-dismiss>Cancelar</button></div></form>`;d.showModal();
+}
+function v19LegacyDialog(){
+ const originals=Object.values(v19Legacy?.characters||{}).filter(c=>c?.id&&!v18BlankSheet(c));
+ const d=v18Dlg();d.innerHTML=`<form id="v19-legacy-form"><h2>Importar fichas antigas</h2><p>Selecione somente as fichas que pertencem à sua conta. As originais permanecerão guardadas neste navegador.</p><div class="v19-import-list">${originals.map(c=>{const p=(v19Legacy.players||[]).find(x=>x.id===c.playerId);return `<label><input type="checkbox" name="sheet" value="${v19Esc(c.id)}" ${db.characters[c.id]?'disabled':''}> <span>${v19Esc(c.name||'Sem nome')} <small>(${v19Esc(p?.name||'Perfil antigo desconhecido')})</small>${db.characters[c.id]?' — já importada':''}</span></label>`}).join('')||'<p>Nenhuma ficha antiga preenchida encontrada.</p>'}</div><div class="actions"><button class="btn primary">Importar selecionadas</button><button type="button" class="btn" data-v18-dismiss>Cancelar</button></div></form>`;d.showModal();
+}
+async function v19ImportSelected(form){
+ const ids=[...form.querySelectorAll('input[name="sheet"]:checked')].map(i=>i.value);if(!ids.length)throw Error('Selecione pelo menos uma ficha.');
+ for(const id of ids){const old=v19Legacy.characters[id];if(!old||db.characters[id])continue;const c=normalize(JSON.parse(JSON.stringify(old)));c.playerId=v19User.uid;c.player=v19Profile.name;delete c.v19CampaignId;db.characters[c.id]=c;v17KnownIds.add(c.id);}
+ v18Dlg().close();s=null;v17EnsureCharacter();render();await v19Flush();toast('Fichas importadas para sua conta.');
+}
+async function v19Join(form){
+ const cid=form.elements.campaign.value.trim(),id=form.elements.character.value,c=db.characters[id];if(!c)throw Error('Selecione um personagem válido.');
+ if(cid.includes('/')||cid.length>100)throw Error('Código de campanha inválido.');
+ const ref=v19F.doc(v19F.db,'campaigns',cid),snap=await v19F.getDoc(ref);if(!snap.exists())throw Error('Campanha não encontrada. Confira o código.');
+ const data=snap.data();if(data.masterUid===v19User.uid)throw Error('Esta campanha pertence à sua própria conta.');
+ c.v19CampaignId=cid;c.campaign=data.name||'Campanha';if(s?.id===c.id)s.campaign=c.campaign;
+ v19QueueSave();await v19Flush();tab='jogador';render();toast('Ficha compartilhada com o mestre da campanha.');
+}
+function v19MasterHead(){return `<header class="v19-master-head"><div><div class="eyebrow">D&D 3.5 • Painel do mestre</div><h1>Olá, ${v19Esc(v19Profile.name)}</h1><p class="muted">${v19Esc(v19User.email)} · Fichas somente para leitura</p></div><div class="actions"><button class="btn" data-v19-myprofile>Editar perfil</button><button class="btn" data-v19-logout>Sair</button></div></header>`}
+async function v19MasterView(){
+ v19Ready=false;v19Mode='mestre';document.body.className='v19-master-mode';v19Root.hidden=false;
+ v19RootView(`<div class="v19-master">${v19MasterHead()}<section class="panel"><h2>Minhas campanhas</h2><p>Carregando campanhas...</p></section></div>`);
+ await v19MasterHome();
+}
+async function v19MasterHome(){
+ const campaigns=[];for(const id of v19Profile.campaignIds||[]){try{const x=await v19F.getDoc(v19F.doc(v19F.db,'campaigns',id));if(x.exists()&&x.data().masterUid===v19User.uid)campaigns.push({id,...x.data()})}catch(e){console.warn(e)}}
+ v19ManagerCampaign=null;v19RootView(`<div class="v19-master">${v19MasterHead()}<section class="panel"><div class="section-head"><h2>Minhas campanhas</h2><button class="btn primary" data-v19-create-campaign>+ Nova campanha</button></div><div class="v19-campaign-grid">${campaigns.map(c=>`<article class="v19-campaign"><h3>${v19Esc(c.name)}</h3><p class="muted">Código de convite: <code>${v19Esc(c.id)}</code></p><div class="actions"><button class="btn primary" data-v19-open-campaign="${v19Esc(c.id)}">Ver fichas e comentários</button><button class="btn" data-v19-copy="${v19Esc(c.id)}">Copiar código</button><button class="btn danger small" data-v19-delete-campaign="${v19Esc(c.id)}">Encerrar campanha</button></div></article>`).join('')||'<p class="muted">Você ainda não criou campanhas.</p>'}</div></section><section class="panel"><details><summary><b>Gerenciar meu perfil</b> (abrir/fechar)</summary><div class="v19-manage-content"><p>Somente você pode editar ou excluir este perfil.</p><button class="btn" data-v19-myprofile>Editar perfil</button> <button class="btn danger small" data-v19-delete-account>Excluir minha conta</button></div></details></section></div>`);
+}
+async function v19CreateCampaign(){
+ const name=prompt('Qual é o nome da campanha? Ex.: A Maldição dos Dragões');if(!name?.trim())return;
+ const docRef=v19F.doc(v19F.collection(v19F.db,'campaigns'));
+ await v19F.setDoc(docRef,{masterUid:v19User.uid,name:name.trim().slice(0,90),createdAt:Date.now()});
+ const list=[...new Set([...(v19Profile.campaignIds||[]),docRef.id])];await v19F.updateDoc(v19F.doc(v19F.db,'users',v19User.uid),{campaignIds:list});v19Profile.campaignIds=list;await v19MasterHome();
+}
+async function v19DeleteCampaign(id){
+ const f=v19F,ref=f.doc(f.db,'campaigns',id),snap=await f.getDoc(ref);
+ if(!snap.exists()||snap.data().masterUid!==v19User.uid)throw Error('Somente o mestre dono pode encerrar esta campanha.');
+ const sheets=await f.getDocs(f.collection(ref,'sheets'));
+ if(sheets.docs.length){alert('Esta campanha ainda tem fichas compartilhadas. Peça a cada jogador para desvincular sua ficha antes de encerrá-la.');return;}
+ if(!confirm('Encerrar permanentemente a campanha '+snap.data().name+'?'))return;
+ await f.deleteDoc(ref);
+ const ids=(v19Profile.campaignIds||[]).filter(x=>x!==id);
+ await f.updateDoc(f.doc(f.db,'users',v19User.uid),{campaignIds:ids});v19Profile.campaignIds=ids;
+ await v19MasterHome();
+}
+async function v19Unlink(id){
+ const c=db.characters[id];if(!c?.v19CampaignId)return;
+ if(!confirm('Desvincular '+(c.name||'esta ficha')+' da campanha? O mestre deixará de ter acesso e os comentários desta campanha serão removidos.'))return;
+ delete c.v19CampaignId;
+ v19QueueSave();await v19Flush();render();toast('Ficha desvinculada da campanha.');
+}
+async function v19OpenCampaign(id){
+ const c=await v19F.getDoc(v19F.doc(v19F.db,'campaigns',id));if(!c.exists()||c.data().masterUid!==v19User.uid)throw Error('Campanha não encontrada ou sem permissão.');
+ v19ManagerCampaign={id,...c.data()};const snaps=await v19F.getDocs(v19F.collection(v19F.db,'campaigns',id,'sheets'));v19ManagerSheets=snaps.docs.map(d=>({id:d.id,...d.data()}));
+ v19RootView(`<div class="v19-master">${v19MasterHead()}<button class="btn" data-v19-home>← Voltar às campanhas</button><section class="panel"><h2>${v19Esc(c.data().name)}</h2><p>Compartilhe este código com os jogadores: <code>${v19Esc(id)}</code> <button class="btn small" data-v19-copy="${v19Esc(id)}">Copiar código</button></p><h3>Fichas recebidas</h3><div class="v19-campaign-grid">${v19ManagerSheets.map(sh=>`<article class="v19-campaign"><h3>${v19Esc(sh.data?.name||'Personagem')}</h3><p class="muted">${v19Esc(sh.ownerName||'Jogador')} · ${v19Esc(sh.data?.race||'')}</p><button class="btn primary" data-v19-open-sheet="${v19Esc(sh.id)}">Ler ficha e comentar</button></article>`).join('')||'<p class="muted">Nenhum jogador compartilhou uma ficha ainda.</p>'}</div></section></div>`);
+}
+const v19Sections=[['identidade','Identidade e história',c=>[['Personagem',c.name],['Jogador',c.player],['Raça',c.race],['Tendência',c.alignment],['Antecedentes',c.background],['Aparência',c.appearance]]],['classe','Classe e progressão',c=>[['Classes',(c.classes||[]).map(x=>x.className+' nível '+x.level).join(' / ')],['Experiência',c.experience]]],['atributos','Atributos',c=>Object.entries(c.abilities||{}).map(([k,v])=>[k,`${v?.base??10} (bônus mágico ${v?.magic??0}, temporário ${v?.temp??0})`])],['combate','Vida e combate',c=>[['PV máximos',c.hp?.maxManual],['Dano sofrido',c.hp?.damage],...Object.entries(c.combat||{})]],['pericias','Perícias',c=>Object.entries(c.skills||{}).filter(([k,v])=>v&&Object.values(v).some(Boolean)).map(([k,v])=>[k,JSON.stringify(v)])],['ataques','Ataques',c=>(c.attacks||[]).map((x,i)=>['Ataque '+(i+1),`${x.name||''} · ${x.damage||''}`])],['talentos','Talentos e habilidades',c=>[...(c.feats||[]),...(c.features||[])].map((x,i)=>[x.name||'Talento '+(i+1),x.notes||x.description||''])],['magias','Magias',c=>(c.spells||[]).map((x,i)=>[x.name||'Magia '+(i+1),x.description||x.notes||''])],['inventario','Inventário',c=>(c.equipment||[]).map((x,i)=>[x.name||'Item '+(i+1),`Quantidade: ${x.quantity??1} · ${x.notes||x.description||''}`])],['anotacoes','Anotações',c=>[['Anotações',c.notes]]]];
+let v19CurrentSheet=null;
+function v19CommentsFor(anchor){return v19MasterComments.filter(x=>x.anchor===anchor).map(x=>`<div class="v19-note"><b>💬 ${v19Esc(x.authorName||'Mestre')}</b><p>${v19Esc(x.text)}</p><small>${x.createdAt?new Date(x.createdAt).toLocaleString('pt-BR'):''}</small></div>`).join('')}
+function v19ReadOnlySheet(sheet){
+ const c=sheet.data||{};let calculated=null;const before=s;try{s=normalize(c);calculated=totals()}catch(e){console.warn('Cálculos do personagem',e)}finally{s=before}
+ const computed=calculated?`<section class="panel"><h2>Resumo calculado de combate</h2><div class="v19-read-grid">${[['PV atual/máximo',calculated.hpCur+' / '+calculated.hpMax],['Classe de armadura',calculated.ac],['CA de toque',calculated.touch],['CA desprevenido',calculated.flat],['Bônus base de ataque',calculated.bab],['Iniciativa',sign(calculated.initiative)],['Fortitude',sign(calculated.sv.fort)],['Reflexos',sign(calculated.sv.ref)],['Vontade',sign(calculated.sv.will)]].map(([k,v])=>`<div><strong>${v19Esc(k)}</strong><span>${v19Esc(v)}</span><button class="v19-bubble" data-v19-comment="${v19Esc('resumo::'+k)}" title="Comentar valor">💬</button>${v19CommentsFor('resumo::'+k)}</div>`).join('')}</div></section>`:'';
+ const blocks=v19Sections.map(([key,label,fields])=>`<section class="panel v19-section" id="v19-sec-${key}"><div class="section-head"><h2>${label}</h2><button class="btn small" data-v19-comment="${key}">💬 Comentar esta seção</button></div><div class="v19-read-grid">${fields(c).map(([k,value])=>`<div><strong>${v19Esc(k)}</strong><span>${v19Esc(typeof value==='object'?JSON.stringify(value):value||'—')}</span><button class="v19-bubble" data-v19-comment="${v19Esc(key+'::'+k)}" title="Comentar este campo">💬</button>${v19CommentsFor(key+'::'+k)}</div>`).join('')||'<p class="muted">Sem registros.</p>'}</div>${v19CommentsFor(key)}</section>`).join('');
+ return `<div class="v19-master">${v19MasterHead()}<button class="btn" data-v19-open-campaign="${v19Esc(v19ManagerCampaign.id)}">← Voltar às fichas</button><section class="panel"><div class="eyebrow">Visualização somente leitura</div><h1>${v19Esc(c.name||'Personagem')}</h1><p>${v19Esc(sheet.ownerName||'Jogador')} · ${v19Esc(c.race||'')} · Nenhuma edição é permitida ao mestre.</p></section>${computed}${blocks}</div>`;
+}
+async function v19OpenSheet(sheetId){
+ const sheet=v19ManagerSheets.find(x=>x.id===sheetId);if(!sheet)throw Error('Ficha não encontrada.');v19CurrentSheet=sheet;
+ const snap=await v19F.getDocs(v19F.collection(v19F.db,'campaigns',v19ManagerCampaign.id,'sheets',sheetId,'comments'));
+ v19MasterComments=snap.docs.map(x=>({id:x.id,...x.data()})).sort((a,b)=>a.createdAt-b.createdAt);v19RootView(v19ReadOnlySheet(sheet));
+}
+function v19CommentForm(anchor){
+ if(!v19CurrentSheet)return;
+ const d=v18Dlg(),label=anchor.split('::').join(' → ');
+ d.innerHTML=`<form id="v19-comment-form"><h2>Comentar: ${v19Esc(label)}</h2><p class="muted">Este comentário ficará vinculado a esta parte da ficha e será visível ao jogador.</p><label>Comentário<textarea name="text" class="inline-input" rows="5" maxlength="3000" placeholder="Escreva sua observação ao jogador" required></textarea></label><div class="actions"><button class="btn primary">Publicar comentário</button><button type="button" class="btn" data-v18-dismiss>Cancelar</button></div><p id="v19-status"></p></form>`;d.dataset.anchor=anchor;d.showModal();
+}
+async function v19PostComment(form){
+ const text=form.elements.text.value.trim(),sheet=v19CurrentSheet;if(!text||!sheet||text.length>3000)throw Error('Escreva um comentário válido.');
+ await v19F.addDoc(v19F.collection(v19F.db,'campaigns',v19ManagerCampaign.id,'sheets',sheet.id,'comments'),{anchor:v18Dlg().dataset.anchor,text,authorUid:v19User.uid,authorName:v19Profile.name,createdAt:Date.now()});
+ v18Dlg().close();await v19OpenSheet(sheet.id);
+}
+async function v19OwnComments(){
+ if(!v19Ready||!s?.v19CampaignId)return;
+ const key=v19User.uid+'__'+s.id;
+ try{const cacheKey=s.v19CampaignId+'/'+key;
+ if(v19CommentsCache.key!==cacheKey || Date.now()-v19CommentsCache.at>45000){const res=await v19F.getDocs(v19F.collection(v19F.db,'campaigns',s.v19CampaignId,'sheets',key,'comments'));v19CommentsCache={key:cacheKey,at:Date.now(),items:res.docs.map(x=>x.data()).sort((a,b)=>a.createdAt-b.createdAt)};}
+ v19Comments=v19CommentsCache.items;
+ let panel=document.getElementById('v19-player-comments');if(!panel){panel=document.createElement('section');panel.id='v19-player-comments';panel.className='panel';document.getElementById('content').prepend(panel)}
+ panel.innerHTML=`<details><summary><b>💬 Comentários do mestre (${v19Comments.length})</b></summary><button type="button" class="btn small" data-v19-refresh-comments>Atualizar comentários</button>${v19Comments.map(x=>`<div class="v19-note"><strong>${v19Esc(x.anchor.replace('::',' → '))}</strong><p>${v19Esc(x.text)}</p><small>${v19Esc(x.authorName)} · ${new Date(x.createdAt).toLocaleString('pt-BR')}</small></div>`).join('')||'<p class="muted">Seu mestre ainda não comentou esta ficha.</p>'}</details>`;
+ }catch(err){console.warn('Comentários:',err)}
+}
+async function v19LogOut(){
+ const scoped=STORE;
+ if(v19Ready){clearTimeout(v19Timer);try{for(let attempts=0;v19Saving&&attempts<60;attempts++)await new Promise(r=>setTimeout(r,100));await v19Flush()}catch(e){alert('Seus últimos dados podem não ter sido sincronizados. Baixe um backup antes de sair.');return}}
+ v19Ready=false;v19Mode='';v19Profile=null;v19User=null;db={active:null,characters:{},customRaces:[],players:[]};s=null;v19Hashes.clear();v19Published.clear();v19CommentsCache={key:'',at:0,items:[]};try{if(scoped.startsWith('grimorio35-v3-cloud-'))localStorage.removeItem(scoped)}catch(_){}await v19F.signOut(v19Auth);v19AuthView();
+}
+async function v19DeleteAccount(){
+ if(!v19User)return;
+ if(v19Profile.role==='mestre'&&(v19Profile.campaignIds||[]).length){alert('Sua conta ainda possui campanhas. Para evitar perda de acesso dos jogadores, exclua ou transfira as campanhas antes de encerrar a conta.');return;}
+ if(!confirm('ATENÇÃO: deseja apagar permanentemente sua conta, perfil e fichas salvas na nuvem? Esta ação não poderá ser desfeita. Exporte um backup antes.'))return;
+ const password=prompt('Por segurança, digite a senha atual da sua conta para confirmar a exclusão.');if(!password)return;
+ const cred=v19F.EmailAuthProvider.credential(v19User.email,password);await v19F.reauthenticateWithCredential(v19User,cred);
+ const u=v19User.uid;
+ if(v19Mode==='jogador'){
+  const current=await v19F.getDocs(v19F.collection(v19F.db,'users',u,'characters'));
+  for(const item of current.docs){const c=item.data().data||{};if(c.v19CampaignId){const sheetRef=v19F.doc(v19F.db,'campaigns',c.v19CampaignId,'sheets',u+'__'+item.id);const comments=await v19F.getDocs(v19F.collection(sheetRef,'comments')).catch(()=>null);if(comments)for(const comment of comments.docs)await v19F.deleteDoc(comment.ref);await v19F.deleteDoc(sheetRef).catch(()=>{});}await v19F.deleteDoc(item.ref)}
+ }
+ await v19F.deleteDoc(v19F.doc(v19F.db,'users',u));await v19F.deleteUser(v19User);try{localStorage.removeItem('grimorio35-v3-cloud-'+u);localStorage.removeItem('grimorio35-v3-cloud-'+u+'-device-player')}catch(_){}v19Ready=false;v19User=null;v19Profile=null;v19Mode='';v19AuthView();
+}
+const v19RenderOld=render;
+render=function(){v19RenderOld();if(v19Ready&&v19Mode==='jogador'){v19PlayerMode();v19QueueSave();if(tab==='personagem'&&s?.v19CampaignId)v19OwnComments();}};
+const v19SaveOld=save;
+save=function(){v19SaveOld();v19QueueSave();};
+// Captura eventos no container de login e painel do mestre antes dos listeners legados.
+document.addEventListener('click',async e=>{
+ const el=e.target.closest('[data-v19-toggle],[data-v19-reset],[data-v19-logout],[data-v19-myprofile],[data-v19-legacy],[data-v19-create-campaign],[data-v19-open-campaign],[data-v19-home],[data-v19-open-sheet],[data-v19-comment],[data-v19-copy],[data-v19-delete-account],[data-v19-refresh-comments],[data-v19-delete-campaign],[data-v19-unlink]');if(!el)return;
+ e.preventDefault();e.stopImmediatePropagation();
+ try{
+ if(el.dataset.v19Toggle)v19AuthView(el.dataset.v19Toggle==='register');
+ else if(el.hasAttribute('data-v19-reset')){const email=prompt('Digite seu e-mail para receber o link de recuperação da senha.');if(email){await v19F.sendPasswordResetEmail(v19Auth,email.trim());alert('Se o e-mail estiver cadastrado, você receberá instruções para recuperar o acesso.')}}
+ else if(el.hasAttribute('data-v19-logout'))await v19LogOut();
+ else if(el.hasAttribute('data-v19-myprofile'))v19EditProfile();
+ else if(el.hasAttribute('data-v19-legacy'))v19LegacyDialog();
+ else if(el.hasAttribute('data-v19-create-campaign'))await v19CreateCampaign();
+ else if(el.hasAttribute('data-v19-open-campaign'))await v19OpenCampaign(el.dataset.v19OpenCampaign);
+ else if(el.hasAttribute('data-v19-home'))await v19MasterHome();
+ else if(el.hasAttribute('data-v19-open-sheet'))await v19OpenSheet(el.dataset.v19OpenSheet);
+ else if(el.hasAttribute('data-v19-comment'))v19CommentForm(el.dataset.v19Comment);
+ else if(el.hasAttribute('data-v19-copy')){await navigator.clipboard.writeText(el.dataset.v19Copy);toast('Código copiado.');}
+ else if(el.hasAttribute('data-v19-delete-account'))await v19DeleteAccount();
+ else if(el.dataset.v19DeleteCampaign)await v19DeleteCampaign(el.dataset.v19DeleteCampaign);
+ else if(el.dataset.v19Unlink)await v19Unlink(el.dataset.v19Unlink);
+ else if(el.hasAttribute('data-v19-refresh-comments')){v19CommentsCache.at=0;await v19OwnComments()}
+ }catch(err){alert(v19Err(err))}
+},true);
+document.addEventListener('submit',async e=>{
+ const id=e.target.id;
+ if(!['v19-auth-form','v19-complete-form','v19-edit-profile','v19-legacy-form','v19-join','v19-comment-form'].includes(id))return;
+ e.preventDefault();e.stopImmediatePropagation();const form=e.target,submit=form.querySelector('[type="submit"],button:not([type])');if(submit)submit.disabled=true;
+ try{
+ if(id==='v19-auth-form'){
+  const email=form.elements.email.value.trim(),password=form.elements.password.value;
+  if(form.elements.role)await v19Register(email,password,form.elements.name.value,form.elements.role.value);
+  else{await v19F.signInWithEmailAndPassword(v19Auth,email,password)}
+ }else if(id==='v19-complete-form'){const data=v19ProfileData(form.elements.name.value,form.elements.role.value);await v19F.setDoc(v19F.doc(v19F.db,'users',v19User.uid),data);await v19Enter(v19User)}
+ else if(id==='v19-edit-profile'){
+  const name=form.elements.name.value.trim(),avatar=form.elements.avatar.value;if(!name)throw Error('Digite o nome do perfil.');
+  v19Profile.name=name;v19Profile.avatar=avatar;await v19F.updateDoc(v19F.doc(v19F.db,'users',v19User.uid),{name,avatar});v19ProfileHash=v19ProfileFingerprint();
+  if(v19Mode==='jogador'){db.players=[{id:v19User.uid,name,avatar,campaigns:[]}];for(const c of Object.values(db.characters))if(c.playerId===v19User.uid)c.player=name;v19QueueSave();render()}else if(v19ManagerCampaign){await v19OpenCampaign(v19ManagerCampaign.id)}else await v19MasterHome();
+  v18Dlg().close();toast('Perfil atualizado.');
+ }else if(id==='v19-legacy-form')await v19ImportSelected(form);
+ else if(id==='v19-join')await v19Join(form);
+ else if(id==='v19-comment-form')await v19PostComment(form);
+ }catch(err){const target=form.querySelector('#v19-status')||document.getElementById('v19-join-status');if(target){target.textContent=v19Err(err);target.style.color='#f6a2a7'}else alert(v19Err(err));}finally{if(submit)submit.disabled=false}
+},true);
+async function v19Initialize(){
+ try{
+  const [a,b,c]=await Promise.all([import(V19_SDK+'firebase-app.js'),import(V19_SDK+'firebase-auth.js'),import(V19_SDK+'firebase-firestore.js')]);
+  const app=a.initializeApp(V19_FIREBASE);const fb=b.getAuth(app),fs=c.getFirestore(app);
+  v19Auth=fb;v19F={...b,...c,db:fs};
+  b.onAuthStateChanged(fb,async user=>{
+   if(!user){v19Ready=false;v19Mode='';v19User=null;v19Profile=null;v19AuthView();return;}
+   try{if(!v19User||v19User.uid!==user.uid||!v19Profile)await v19Enter(user)}catch(e){v19Wait('Erro ao carregar: '+v19Err(e));}
+  });
+ }catch(e){console.error(e);v19Wait('Falha ao iniciar o Firebase. Verifique a internet ou confira se o projeto está configurado.');}
+}
+v19Wait();v19Initialize();
 
 render();})();
 
