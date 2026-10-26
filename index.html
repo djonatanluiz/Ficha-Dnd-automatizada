@@ -178,10 +178,12 @@
 #v18-dialog .actions{margin-top:20px}
 @media(max-width:540px){.v18-mapping-row{grid-template-columns:1fr;gap:6px}}
 
-<style>/* A ficha permanece oculta até autenticação e carregamento completos. */
-body.v19-gated .app{visibility:hidden;height:0;overflow:hidden}
-body.v19-master-mode .app{display:none}
-body.v19-player-mode .app{visibility:visible}
+/* Tela de entrada: a ficha so aparece para o jogador autenticado. */
+/* A interface principal nao pode ocupar espaco nem receber foco antes do login. */
+body:not(.v19-player-mode) .app{display:none!important}
+body.v19-gated #v19-root{display:flex;min-height:100vh;min-height:100svh;align-items:center;justify-content:center}
+body.v19-gated .v19-auth-panel{margin:12px auto}
+body.v19-gated{overflow-x:hidden}
 #v19-root[hidden]{display:none!important}
 #v19-root{min-height:100vh;padding:25px 18px;color:var(--text);background:var(--bg)}
 .v19-auth-panel{width:min(450px,100%);margin:6vh auto 0;padding:28px;background:var(--panel);border:1px solid var(--line);border-radius:16px}
