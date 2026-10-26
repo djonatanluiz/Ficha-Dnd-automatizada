@@ -190,6 +190,10 @@ body.v19-gated{overflow-x:hidden}
 .v19-auth-panel h1{font:700 30px Georgia,serif;color:var(--gold)}
 .v19-auth-panel form{display:grid;gap:13px}.v19-auth-panel form label{display:grid;gap:6px;font-size:13px}
 .v19-auth-panel form button{margin-top:8px}.v19-auth-panel>.btn{margin-top:10px}
+.v19-auth-panel form label.v19-remember{display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin:3px 0 0;font-size:13px}
+.v19-remember input[type="checkbox"]{width:17px;height:17px;min-width:17px;margin:2px 0 0;accent-color:var(--gold);cursor:pointer}
+.v19-remember strong{display:block;color:var(--text);font-weight:650}
+.v19-remember small{display:block;color:var(--muted);font-size:11px;margin-top:3px;line-height:1.5}
 .v19-user-nav{margin-top:20px;border-top:1px solid var(--line);padding:12px 0;overflow-wrap:anywhere;font-size:12px}
 .v19-user-nav>span{display:block;color:var(--muted);margin:4px 9px}.v19-sync{color:var(--ok)!important}
 .v19-manage summary,#v19-root summary{cursor:pointer;color:var(--gold);padding:5px 0}.v19-manage-content{padding:13px 0;display:grid;gap:12px}
@@ -25497,6 +25501,8 @@ document.addEventListener('submit',e=>{
 // Este módulo é executado DENTRO do closure original da ficha, antes do render final.
 const V19_FIREBASE={apiKey:'AIzaSyC66YdnK1e2Qs5B_p3mirA8G0ZxqD7rEaY',authDomain:'ficha-aut.firebaseapp.com',projectId:'ficha-aut',appId:'1:827447445119:web:b96fe7f3a3ace16536e14a'};
 const V19_SDK='https://www.gstatic.com/firebasejs/11.10.0/';
+const V19_REMEMBER_KEY='grimorio35-v19-remember-login';
+function v19RememberChecked(){try{return localStorage.getItem(V19_REMEMBER_KEY)==='1'}catch(_){return false}}
 const v19Root=document.getElementById('v19-root');
 let v19F=null,v19Auth=null,v19User=null,v19Profile=null,v19Ready=false,v19Mode='',v19Timer=null,v19Saving=false,v19NeedsSave=false,v19Hashes=new Map(),v19Published=new Map(),v19ProfileHash='',v19Legacy=null,v19LastCommentUnsub=null,v19Comments=[],v19ManagerCampaign=null,v19ManagerSheets=[],v19MasterComments=[],v19Busy=false;
 try{v19Legacy=JSON.parse(localStorage.getItem('grimorio35-v3')||'null')}catch(_){v19Legacy=null}
@@ -25504,7 +25510,10 @@ const v19Esc=x=>enc(String(x??''));
 function v19RootView(html){v19Root.innerHTML=html;v19Root.hidden=false;}
 function v19Status(msg,error=false){const e=v19Root.querySelector('#v19-status');if(e){e.textContent=msg||'';e.style.color=error?'#f6a2a7':'#a8d9aa';}}
 function v19Wait(message='Conectando ao banco de dados...'){document.body.className='v19-gated';v19RootView(`<section class="v19-auth-panel"><h1>⚔️ Ficha D&D 3.5</h1><p>${v19Esc(message)}</p><p class="muted">Suas fichas antigas neste navegador não serão apagadas.</p></section>`)}
-function v19AuthView(register=false){document.body.className='v19-gated';v19RootView(`<section class="v19-auth-panel"><div class="eyebrow">Dungeons & Dragons 3.5e</div><h1>${register?'Criar conta':'Entrar na ficha'}</h1><p class="muted">${register?'Escolha o tipo de conta e crie seu perfil.':'Entre com o e-mail cadastrado para ver apenas seus dados.'}</p><form id="v19-auth-form"><label>E-mail<input name="email" class="inline-input" type="email" autocomplete="email" required></label><label>Senha<input name="password" class="inline-input" type="password" autocomplete="${register?'new-password':'current-password'}" minlength="6" required></label>${register?`<label>Nome do perfil<input name="name" class="inline-input" maxlength="60" required></label><label>Tipo de conta<select name="role" class="inline-input"><option value="jogador">Jogador — cria e edita suas fichas</option><option value="mestre">Mestre — organiza campanhas, lê fichas e comenta</option></select></label>`:''}<button type="submit" class="btn primary">${register?'Cadastrar':'Entrar'}</button></form><p id="v19-status" role="alert"></p><button class="btn ghost" data-v19-toggle="${register?'login':'register'}">${register?'Já tenho conta':'Criar uma conta'}</button>${!register?'<button class="btn ghost" data-v19-reset>Esqueci minha senha</button>':''}</section>`);}
+function v19AuthView(register=false){
+ document.body.className='v19-gated';
+ v19RootView(`<section class="v19-auth-panel"><div class="eyebrow">Dungeons & Dragons 3.5e</div><h1>${register?'Criar conta':'Entrar na ficha'}</h1><p class="muted">${register?'Escolha o tipo de conta e crie seu perfil.':'Entre com o e-mail cadastrado para ver apenas seus dados.'}</p><form id="v19-auth-form"><label>E-mail<input name="email" class="inline-input" type="email" autocomplete="email" required></label><label>Senha<input name="password" class="inline-input" type="password" autocomplete="${register?'new-password':'current-password'}" minlength="6" required></label>${register?`<label>Nome do perfil<input name="name" class="inline-input" maxlength="60" required></label><label>Tipo de conta<select name="role" class="inline-input"><option value="jogador">Jogador — cria e edita suas fichas</option><option value="mestre">Mestre — organiza campanhas, lê fichas e comenta</option></select></label>`:''}<label class="v19-remember"><input name="remember" type="checkbox" ${v19RememberChecked()?'checked':''}><span><strong>Lembrar de mim neste aparelho</strong><small>Manter o acesso mesmo depois de fechar o navegador. Não marque em computadores compartilhados.</small></span></label><button type="submit" class="btn primary">${register?'Cadastrar':'Entrar'}</button></form><p id="v19-status" role="alert"></p><button class="btn ghost" data-v19-toggle="${register?'login':'register'}">${register?'Já tenho conta':'Criar uma conta'}</button>${!register?'<button class="btn ghost" data-v19-reset>Esqueci minha senha</button>':''}</section>`);
+}
 function v19CompleteView(){document.body.className='v19-gated';v19RootView(`<section class="v19-auth-panel"><h1>Finalizar cadastro</h1><p>Escolha seu perfil para concluir a criação da conta.</p><form id="v19-complete-form"><label>Nome<input name="name" class="inline-input" maxlength="60" required></label><label>Tipo de conta<select name="role" class="inline-input"><option value="jogador">Jogador</option><option value="mestre">Mestre</option></select></label><button class="btn primary">Criar meu perfil</button></form><p id="v19-status"></p><button class="btn" data-v19-logout>Sair</button></section>`)}
 function v19Err(e){const codes={'auth/email-already-in-use':'Este e-mail já está cadastrado. Use Entrar.','auth/invalid-credential':'E-mail ou senha incorretos.','auth/weak-password':'A senha precisa ter pelo menos 6 caracteres.','auth/invalid-email':'Digite um e-mail válido.','auth/too-many-requests':'Muitas tentativas. Tente mais tarde.','permission-denied':'Acesso negado pelo Firestore. Publique as regras de segurança da versão nova.','auth/requires-recent-login':'Por segurança, entre novamente na sua conta antes de excluir.'};return codes[e?.code]||e?.message||String(e)}
 function v19ProfileData(name,role){return {name:String(name||'').trim().slice(0,60),role,avatar:role==='mestre'?'🔮':'🧙',campaignIds:[],createdAt:Date.now()}}
@@ -25570,7 +25579,14 @@ async function v19RemoveShared(cid,id,ownerUid){
 }
 function v19PlayerMode(){
  document.body.className='v19-player-mode';v19Root.hidden=true;
- const nav=document.getElementById('navigation');if(!nav.querySelector('[data-v19-logout]'))nav.insertAdjacentHTML('beforeend',`<div class="v19-user-nav"><span>${v19Esc(v19User.email)}</span><span class="v19-sync" id="v19-sync">Nuvem conectada</span><button class="nav-btn" data-v19-myprofile>👤 Editar meu perfil</button><button class="nav-btn" data-v19-logout>🚪 Sair</button></div>`);
+ const nav=document.getElementById('navigation');
+ let panel=nav.querySelector('.v19-user-nav');
+ if(!panel){panel=document.createElement('div');panel.className='v19-user-nav';nav.appendChild(panel)}
+ // Atualize o e-mail ao trocar de conta no mesmo navegador; preserve o estado da sincronização durante renderizações.
+ if(panel.dataset.uid!==v19User.uid){
+  panel.dataset.uid=v19User.uid;
+  panel.innerHTML=`<span>${v19Esc(v19User.email)}</span><span class="v19-sync" id="v19-sync">Nuvem conectada</span><button class="nav-btn" data-v19-myprofile>👤 Editar meu perfil</button><button class="nav-btn" data-v19-logout>🚪 Sair da conta</button>`;
+ }
 }
 function v19OwnHub(){
  const p=v19Profile,chars=Object.values(db.characters).filter(x=>!v18BlankSheet(x));
@@ -25579,7 +25595,7 @@ function v19OwnHub(){
 // Substitui o menu local de múltiplos perfis por UM perfil, vinculado ao e-mail.
 v17Hub=function(){return v19Ready?v19OwnHub():'';};
 // Configurações em um toggle compacto, apenas o perfil da conta atual.
-v18SettingsPanel=function(){return v19Ready?`<section class="panel v19-manage"><details><summary><b>Gerenciar meu perfil</b> <span class="muted">(abrir/fechar)</span></summary><div class="v19-manage-content"><p><b>${v19Esc(v19Profile.name)}</b> · ${v19Esc(v19User.email)}<br>Somente você gerencia esta conta.</p><div class="actions"><button class="btn" data-v19-myprofile>Editar perfil</button><button class="btn" data-v18-backup>Baixar backup das minhas fichas</button></div><p class="muted">Os personagens desta conta são seus. Não é possível transferir fichas diretamente para outro e-mail nesta tela.</p><button class="btn danger small" data-v19-delete-account>Excluir minha conta e minhas fichas</button></div></details></section>`:'';};
+v18SettingsPanel=function(){return v19Ready?`<section class="panel v19-manage"><details><summary><b>Gerenciar meu perfil</b> <span class="muted">(abrir/fechar)</span></summary><div class="v19-manage-content"><p><b>${v19Esc(v19Profile.name)}</b> · ${v19Esc(v19User.email)}<br>Somente você gerencia esta conta.</p><div class="actions"><button class="btn" data-v19-myprofile>Editar perfil</button><button class="btn" data-v18-backup>Baixar backup das minhas fichas</button><button class="btn" data-v19-logout>🚪 Sair da conta</button></div><p class="muted">Os personagens desta conta são seus. Não é possível transferir fichas diretamente para outro e-mail nesta tela.</p><button class="btn danger small" data-v19-delete-account>Excluir minha conta e minhas fichas</button></div></details></section>`:'';};
 // Evento delegado antigo abre a edição legada; capturamos ANTES para impedir múltiplos perfis.
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-v17-new-profile],[data-v17-profile],[data-v17-edit-profile],[data-v18-delete],[data-v18-organize],[data-v18-restore]');
@@ -25621,7 +25637,7 @@ async function v19MasterView(){
 }
 async function v19MasterHome(){
  const campaigns=[];for(const id of v19Profile.campaignIds||[]){try{const x=await v19F.getDoc(v19F.doc(v19F.db,'campaigns',id));if(x.exists()&&x.data().masterUid===v19User.uid)campaigns.push({id,...x.data()})}catch(e){console.warn(e)}}
- v19ManagerCampaign=null;v19RootView(`<div class="v19-master">${v19MasterHead()}<section class="panel"><div class="section-head"><h2>Minhas campanhas</h2><button class="btn primary" data-v19-create-campaign>+ Nova campanha</button></div><div class="v19-campaign-grid">${campaigns.map(c=>`<article class="v19-campaign"><h3>${v19Esc(c.name)}</h3><p class="muted">Código de convite: <code>${v19Esc(c.id)}</code></p><div class="actions"><button class="btn primary" data-v19-open-campaign="${v19Esc(c.id)}">Ver fichas e comentários</button><button class="btn" data-v19-copy="${v19Esc(c.id)}">Copiar código</button><button class="btn danger small" data-v19-delete-campaign="${v19Esc(c.id)}">Encerrar campanha</button></div></article>`).join('')||'<p class="muted">Você ainda não criou campanhas.</p>'}</div></section><section class="panel"><details><summary><b>Gerenciar meu perfil</b> (abrir/fechar)</summary><div class="v19-manage-content"><p>Somente você pode editar ou excluir este perfil.</p><button class="btn" data-v19-myprofile>Editar perfil</button> <button class="btn danger small" data-v19-delete-account>Excluir minha conta</button></div></details></section></div>`);
+ v19ManagerCampaign=null;v19RootView(`<div class="v19-master">${v19MasterHead()}<section class="panel"><div class="section-head"><h2>Minhas campanhas</h2><button class="btn primary" data-v19-create-campaign>+ Nova campanha</button></div><div class="v19-campaign-grid">${campaigns.map(c=>`<article class="v19-campaign"><h3>${v19Esc(c.name)}</h3><p class="muted">Código de convite: <code>${v19Esc(c.id)}</code></p><div class="actions"><button class="btn primary" data-v19-open-campaign="${v19Esc(c.id)}">Ver fichas e comentários</button><button class="btn" data-v19-copy="${v19Esc(c.id)}">Copiar código</button><button class="btn danger small" data-v19-delete-campaign="${v19Esc(c.id)}">Encerrar campanha</button></div></article>`).join('')||'<p class="muted">Você ainda não criou campanhas.</p>'}</div></section><section class="panel"><details><summary><b>Gerenciar meu perfil</b> (abrir/fechar)</summary><div class="v19-manage-content"><p>Somente você pode editar ou excluir este perfil.</p><button class="btn" data-v19-myprofile>Editar perfil</button> <button class="btn" data-v19-logout>🚪 Sair da conta</button> <button class="btn danger small" data-v19-delete-account>Excluir minha conta</button></div></details></section></div>`);
 }
 async function v19CreateCampaign(){
  const name=prompt('Qual é o nome da campanha? Ex.: A Maldição dos Dragões');if(!name?.trim())return;
@@ -25688,7 +25704,7 @@ async function v19OwnComments(){
 async function v19LogOut(){
  const scoped=STORE;
  if(v19Ready){clearTimeout(v19Timer);try{for(let attempts=0;v19Saving&&attempts<60;attempts++)await new Promise(r=>setTimeout(r,100));await v19Flush()}catch(e){alert('Seus últimos dados podem não ter sido sincronizados. Baixe um backup antes de sair.');return}}
- v19Ready=false;v19Mode='';v19Profile=null;v19User=null;db={active:null,characters:{},customRaces:[],players:[]};s=null;v19Hashes.clear();v19Published.clear();v19CommentsCache={key:'',at:0,items:[]};try{if(scoped.startsWith('grimorio35-v3-cloud-'))localStorage.removeItem(scoped)}catch(_){}await v19F.signOut(v19Auth);v19AuthView();
+ v19Ready=false;v19Mode='';v19Profile=null;v19User=null;db={active:null,characters:{},customRaces:[],players:[]};s=null;v19Hashes.clear();v19Published.clear();v19CommentsCache={key:'',at:0,items:[]};try{if(scoped.startsWith('grimorio35-v3-cloud-'))localStorage.removeItem(scoped)}catch(_){}await v19F.signOut(v19Auth);document.querySelector('#navigation .v19-user-nav')?.remove();v19AuthView();
 }
 async function v19DeleteAccount(){
  if(!v19User)return;
@@ -25736,6 +25752,10 @@ document.addEventListener('submit',async e=>{
  try{
  if(id==='v19-auth-form'){
   const email=form.elements.email.value.trim(),password=form.elements.password.value;
+  // A opção é aplicada ANTES de entrar/criar a conta para o Firebase guardar a sessão no local correto.
+  const remember=Boolean(form.elements.remember?.checked);
+  await v19F.setPersistence(v19Auth,remember?v19F.browserLocalPersistence:v19F.browserSessionPersistence);
+  try{localStorage.setItem(V19_REMEMBER_KEY,remember?'1':'0')}catch(_){}
   if(form.elements.role)await v19Register(email,password,form.elements.name.value,form.elements.role.value);
   else{await v19F.signInWithEmailAndPassword(v19Auth,email,password)}
  }else if(id==='v19-complete-form'){const data=v19ProfileData(form.elements.name.value,form.elements.role.value);await v19F.setDoc(v19F.doc(v19F.db,'users',v19User.uid),data);await v19Enter(v19User)}
